@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';     // ← Ini yang benar
+import { supabase } from '../../lib/supabase';
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
@@ -15,6 +15,10 @@ export default function Login() {
     setLoading(true);
     setError('');
 
+    console.log("=== LOGIN ATTEMPT ===");
+    console.log("URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log("Key length:", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.length);
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
@@ -22,12 +26,15 @@ export default function Login() {
       });
 
       if (error) {
+        console.error("Supabase Error:", error);
         setError(error.message);
       } else {
-        router.push('/home');   // ← Akan kita buat di langkah berikutnya
+        console.log("✅ Login Berhasil!", data);
+        router.push('/admin/dashboard');
       }
     } catch (err: any) {
-      setError("Gagal koneksi ke Supabase.");
+      console.error("❌ Catch Error:", err);
+      setError("Gagal koneksi ke Supabase. Lihat console.");
     }
 
     setLoading(false);
@@ -41,24 +48,12 @@ export default function Login() {
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="block mb-2 font-medium">Email</label>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              className="w-full px-4 py-3 border rounded-lg" 
-              required 
-            />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 border rounded-lg" required />
           </div>
 
           <div>
             <label className="block mb-2 font-medium">Password</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className="w-full px-4 py-3 border rounded-lg" 
-              required 
-            />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 border rounded-lg" required />
           </div>
 
           {error && <p className="text-red-600 text-center font-medium">{error}</p>}
