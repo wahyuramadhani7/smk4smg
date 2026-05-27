@@ -1,5 +1,6 @@
+// app/layout.tsx
 import './globals.css';
-import Navbar from './components/Navbar';
+import LayoutClient from './components/LayoutClient';
 
 export const metadata = {
   title: 'SMK 4 SMG | Sekolah Menengah Kejuruan Unggul',
@@ -14,8 +15,9 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className="bg-gray-50 font-sans">
-        <Navbar />
-        {children}
+        <LayoutClient>
+          {children}
+        </LayoutClient>
       </body>
     </html>
   );

@@ -1,6 +1,4 @@
-'use client'
-
-export const dynamic = 'force-dynamic'
+'use client';
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useRouter } from 'next/navigation';
@@ -45,7 +43,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-8 text-blue-800">Login Guru</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-blue-800">Login Admin</h1>
         
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
