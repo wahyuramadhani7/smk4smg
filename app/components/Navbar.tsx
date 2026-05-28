@@ -24,7 +24,7 @@ export default function Navbar() {
             </div>
 
             <div>
-              <p className="font-bold text-lg leading-tight">SMK 4 SMG</p>
+              <p className="font-bold text-lg leading-tight">SMKN 4 SEMARANG</p>
               <p className="text-xs text-blue-200">Semarang</p>
             </div>
           </Link>
