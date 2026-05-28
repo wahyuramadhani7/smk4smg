@@ -81,11 +81,27 @@ export default function Navbar() {
               </div>
             </div>
 
+            {/* Menu Baru: Bahan Ajar */}
+            <Link
+              href="/bahan-ajar"
+              className="hover:text-blue-200 transition-colors"
+            >
+              Bahan Ajar
+            </Link>
+
             <Link
               href="/evaluasi"
               className="hover:text-blue-200 transition-colors"
             >
               Evaluasi
+            </Link>
+
+            {/* Menu Baru: ICT */}
+            <Link
+              href="/ict"
+              className="hover:text-blue-200 transition-colors"
+            >
+              ICT
             </Link>
 
             <Link
@@ -197,12 +213,30 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* Bahan Ajar Mobile */}
+          <Link
+            href="/bahan-ajar"
+            onClick={() => setIsOpen(false)}
+            className="block py-2.5 text-sm hover:text-blue-200"
+          >
+            Bahan Ajar
+          </Link>
+
           <Link
             href="/evaluasi"
             onClick={() => setIsOpen(false)}
             className="block py-2.5 text-sm hover:text-blue-200"
           >
             Evaluasi
+          </Link>
+
+          {/* ICT Mobile */}
+          <Link
+            href="/ict"
+            onClick={() => setIsOpen(false)}
+            className="block py-2.5 text-sm hover:text-blue-200"
+          >
+            ICT
           </Link>
 
           <Link
