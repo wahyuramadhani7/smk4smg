@@ -9,14 +9,12 @@ const supabase = createClient(
 );
 
 interface KurikulumContent {
-  // Profil Kurikulum
+  id?: string;
   profil_title: string;
   profil_description: string;
   tujuan_pembelajaran: string[];
   sistem_pembelajaran: string;
   dokumen_kurikulum_url: string;
-
-  // Struktur Kurikulum
   struktur_kelas_x: string;
   struktur_kelas_xi: string;
   struktur_kelas_xii: string;
@@ -32,7 +30,6 @@ const DEFAULT: KurikulumContent = {
   ],
   sistem_pembelajaran: 'Berbasis Proyek Nyata (Project Based Learning) dengan pendekatan industri.',
   dokumen_kurikulum_url: '#',
-
   struktur_kelas_x: 'Dasar-dasar kejuruan + mata pelajaran umum + proyek sederhana.',
   struktur_kelas_xi: 'Pembelajaran inti jurusan + praktik di workshop + magang industri tahap awal.',
   struktur_kelas_xii: 'Spesialisasi keahlian + magang industri intensif + persiapan kerja.',
@@ -51,15 +48,25 @@ export default function AdminKurikulum() {
 
   const fetchContent = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('kurikulum_content')
       .select('*')
       .limit(1)
       .single();
 
     if (data) {
-      setContent(data as KurikulumContent);
-    } else if (error && error.code === 'PGRST116') {
+      setContent({
+        id: data.id,
+        profil_title: data.profil_title || DEFAULT.profil_title,
+        profil_description: data.profil_description || '',
+        tujuan_pembelajaran: Array.isArray(data.tujuan_pembelajaran) ? data.tujuan_pembelajaran : DEFAULT.tujuan_pembelajaran,
+        sistem_pembelajaran: data.sistem_pembelajaran || '',
+        dokumen_kurikulum_url: data.dokumen_kurikulum_url || '#',
+        struktur_kelas_x: data.struktur_kelas_x || '',
+        struktur_kelas_xi: data.struktur_kelas_xi || '',
+        struktur_kelas_xii: data.struktur_kelas_xii || '',
+      });
+    } else {
       await supabase.from('kurikulum_content').insert([DEFAULT]);
       setContent(DEFAULT);
     }
@@ -70,15 +77,24 @@ export default function AdminKurikulum() {
     setSaving(true);
     setMessage('');
 
+    // 🔥 Merge dengan DEFAULT untuk memastikan semua field ada
+    const dataToSave = {
+      ...DEFAULT,
+      ...content,
+      tujuan_pembelajaran: Array.isArray(content.tujuan_pembelajaran) ? content.tujuan_pembelajaran : DEFAULT.tujuan_pembelajaran,
+    };
+
     const { error } = await supabase
       .from('kurikulum_content')
-      .upsert(content, { onConflict: 'id' });
+      .upsert(dataToSave, { onConflict: 'id' });
 
     if (error) {
       setMessage('❌ Gagal menyimpan: ' + error.message);
     } else {
-      setMessage('✅ Perubahan berhasil disimpan!');
-      setTimeout(() => setMessage(''), 3000);
+      setMessage('✅ Berhasil disimpan!');
+      setTimeout(() => {
+        fetchContent(); // Refresh full data
+      }, 600);
     }
     setSaving(false);
   };
@@ -88,18 +104,17 @@ export default function AdminKurikulum() {
   };
 
   const updateTujuan = (index: number, value: string) => {
-    const newTujuan = [...content.tujuan_pembelajaran];
+    const newTujuan = [...(content.tujuan_pembelajaran || [])];
     newTujuan[index] = value;
     updateField('tujuan_pembelajaran', newTujuan);
   };
 
   const addTujuan = () => {
-    updateField('tujuan_pembelajaran', [...content.tujuan_pembelajaran, '']);
+    updateField('tujuan_pembelajaran', [...(content.tujuan_pembelajaran || []), '']);
   };
 
   const removeTujuan = (index: number) => {
-    const newTujuan = content.tujuan_pembelajaran.filter((_, i) => i !== index);
-    updateField('tujuan_pembelajaran', newTujuan);
+    updateField('tujuan_pembelajaran', (content.tujuan_pembelajaran || []).filter((_, i) => i !== index));
   };
 
   if (loading) return <div className="p-10 text-center text-lg">Memuat data...</div>;
@@ -121,137 +136,76 @@ export default function AdminKurikulum() {
           </button>
         </div>
 
-        {message && (
-          <div className="mb-6 p-4 rounded-xl bg-green-100 text-green-700 border border-green-300">
-            {message}
-          </div>
-        )}
+        {message && <div className="mb-6 p-4 rounded-xl bg-green-100 text-green-700">{message}</div>}
 
-        {/* Tab Navigation */}
+        {/* Tab */}
         <div className="flex border-b mb-8">
-          <button
-            onClick={() => setActiveTab('profil')}
-            className={`px-6 py-3 font-medium text-lg border-b-2 transition-all ${
-              activeTab === 'profil' 
-                ? 'border-blue-600 text-blue-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
+          <button onClick={() => setActiveTab('profil')} className={`px-6 py-3 font-medium text-lg border-b-2 transition-all ${activeTab === 'profil' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
             Profil Kurikulum
           </button>
-          <button
-            onClick={() => setActiveTab('struktur')}
-            className={`px-6 py-3 font-medium text-lg border-b-2 transition-all ${
-              activeTab === 'struktur' 
-                ? 'border-blue-600 text-blue-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
+          <button onClick={() => setActiveTab('struktur')} className={`px-6 py-3 font-medium text-lg border-b-2 transition-all ${activeTab === 'struktur' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
             Struktur Kurikulum
           </button>
         </div>
 
-        {/* ==================== TAB PROFIL KURIKULUM ==================== */}
+        {/* Profil Tab */}
         {activeTab === 'profil' && (
           <div className="bg-white rounded-2xl shadow p-8 space-y-8">
             <h2 className="text-2xl font-semibold">Profil Kurikulum</h2>
-
+            {/* Form Profil */}
             <div>
               <label className="block text-sm font-medium mb-2">Judul Halaman</label>
-              <input
-                type="text"
-                value={content.profil_title}
-                onChange={(e) => updateField('profil_title', e.target.value)}
-                className="w-full border rounded-lg px-4 py-3"
-              />
+              <input type="text" value={content.profil_title} onChange={(e) => updateField('profil_title', e.target.value)} className="w-full border rounded-lg px-4 py-3" />
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2">Deskripsi Utama</label>
-              <textarea
-                value={content.profil_description}
-                onChange={(e) => updateField('profil_description', e.target.value)}
-                className="w-full border rounded-lg px-4 py-3 h-32"
-              />
+              <textarea value={content.profil_description || ''} onChange={(e) => updateField('profil_description', e.target.value)} className="w-full border rounded-lg px-4 py-3 h-32" />
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-3">
                 <label className="block text-sm font-medium">Tujuan Pembelajaran</label>
-                <button onClick={addTujuan} className="text-blue-600 text-sm hover:underline">
-                  + Tambah Tujuan
-                </button>
+                <button onClick={addTujuan} className="text-blue-600 text-sm hover:underline">+ Tambah</button>
               </div>
-              {content.tujuan_pembelajaran.map((item, index) => (
+              {(content.tujuan_pembelajaran || []).map((item, index) => (
                 <div key={index} className="flex gap-3 mb-3">
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => updateTujuan(index, e.target.value)}
-                    className="flex-1 border rounded-lg px-4 py-3"
-                  />
-                  <button
-                    onClick={() => removeTujuan(index)}
-                    className="px-5 text-red-500 hover:bg-red-50 rounded-lg"
-                  >
-                    ✕
-                  </button>
+                  <input type="text" value={item || ''} onChange={(e) => updateTujuan(index, e.target.value)} className="flex-1 border rounded-lg px-4 py-3" />
+                  <button onClick={() => removeTujuan(index)} className="px-5 text-red-500 hover:bg-red-50 rounded-lg">✕</button>
                 </div>
               ))}
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2">Sistem Pembelajaran</label>
-              <textarea
-                value={content.sistem_pembelajaran}
-                onChange={(e) => updateField('sistem_pembelajaran', e.target.value)}
-                className="w-full border rounded-lg px-4 py-3 h-24"
-              />
+              <textarea value={content.sistem_pembelajaran || ''} onChange={(e) => updateField('sistem_pembelajaran', e.target.value)} className="w-full border rounded-lg px-4 py-3 h-24" />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Link Dokumen Kurikulum (PDF)</label>
-              <input
-                type="text"
-                value={content.dokumen_kurikulum_url}
-                onChange={(e) => updateField('dokumen_kurikulum_url', e.target.value)}
-                className="w-full border rounded-lg px-4 py-3"
-                placeholder="https://..."
-              />
+              <label className="block text-sm font-medium mb-2">Link Dokumen Kurikulum</label>
+              <input type="text" value={content.dokumen_kurikulum_url || '#'} onChange={(e) => updateField('dokumen_kurikulum_url', e.target.value)} className="w-full border rounded-lg px-4 py-3" />
             </div>
           </div>
         )}
 
-        {/* ==================== TAB STRUKTUR KURIKULUM ==================== */}
+        {/* Struktur Tab */}
         {activeTab === 'struktur' && (
           <div className="bg-white rounded-2xl shadow p-8 space-y-10">
             <h2 className="text-2xl font-semibold">Struktur Kurikulum</h2>
 
             <div>
               <h3 className="text-lg font-semibold mb-3 text-blue-700">Kelas X (Semester 1-2)</h3>
-              <textarea
-                value={content.struktur_kelas_x}
-                onChange={(e) => updateField('struktur_kelas_x', e.target.value)}
-                className="w-full border rounded-lg px-4 py-4 h-28"
-              />
+              <textarea value={content.struktur_kelas_x || ''} onChange={(e) => updateField('struktur_kelas_x', e.target.value)} className="w-full border rounded-lg px-4 py-4 h-28" />
             </div>
 
             <div>
               <h3 className="text-lg font-semibold mb-3 text-blue-700">Kelas XI (Semester 3-4)</h3>
-              <textarea
-                value={content.struktur_kelas_xi}
-                onChange={(e) => updateField('struktur_kelas_xi', e.target.value)}
-                className="w-full border rounded-lg px-4 py-4 h-28"
-              />
+              <textarea value={content.struktur_kelas_xi || ''} onChange={(e) => updateField('struktur_kelas_xi', e.target.value)} className="w-full border rounded-lg px-4 py-4 h-28" />
             </div>
 
             <div>
               <h3 className="text-lg font-semibold mb-3 text-blue-700">Kelas XII (Semester 5-6)</h3>
-              <textarea
-                value={content.struktur_kelas_xii}
-                onChange={(e) => updateField('struktur_kelas_xii', e.target.value)}
-                className="w-full border rounded-lg px-4 py-4 h-28"
-              />
+              <textarea value={content.struktur_kelas_xii || ''} onChange={(e) => updateField('struktur_kelas_xii', e.target.value)} className="w-full border rounded-lg px-4 py-4 h-28" />
             </div>
           </div>
         )}
