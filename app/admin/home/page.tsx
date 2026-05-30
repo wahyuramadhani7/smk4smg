@@ -21,6 +21,8 @@ interface HomeContent {
   stats: { value: string; label: string }[];
   foto1_url: string;
   foto1_caption: string;
+  foto2_url: string;
+  foto2_caption: string;
 }
 
 const DEFAULT: HomeContent = {
@@ -45,6 +47,8 @@ const DEFAULT: HomeContent = {
   ],
   foto1_url: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=800',
   foto1_caption: 'Kepala Sekolah SMK 4 Semarang',
+  foto2_url: '',
+  foto2_caption: '',
 };
 
 export default function AdminHome() {
@@ -52,8 +56,10 @@ export default function AdminHome() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [uploading1, setUploading1] = useState(false);
+  const [uploading2, setUploading2] = useState(false);
+  const [preview1, setPreview1] = useState('');
+  const [preview2, setPreview2] = useState('');
 
   useEffect(() => {
     fetchContent();
@@ -68,12 +74,29 @@ export default function AdminHome() {
       .single();
 
     if (data) {
-      setContent(data as HomeContent);
-      setPreviewUrl(data.foto1_url || '');
-    } else if (error?.code === 'PGRST116') {
+      // Perbaikan null values
+      const cleaned = {
+        ...DEFAULT,
+        ...data,
+        hero_subtitle: data.hero_subtitle || '',
+        sambutan_kutipan: data.sambutan_kutipan || '',
+        sambutan_nama: data.sambutan_nama || '',
+        sambutan_jabatan: data.sambutan_jabatan || '',
+        visi: data.visi || '',
+        foto1_caption: data.foto1_caption || '',
+        foto2_url: data.foto2_url || '',
+        foto2_caption: data.foto2_caption || '',
+        misi: data.misi || [],
+        stats: data.stats || [],
+      } as HomeContent;
+
+      setContent(cleaned);
+      setPreview1(cleaned.foto1_url || '');
+      setPreview2(cleaned.foto2_url || '');
+    } else {
       await supabase.from('home_content').insert([DEFAULT]);
       setContent(DEFAULT);
-      setPreviewUrl(DEFAULT.foto1_url);
+      setPreview1(DEFAULT.foto1_url);
     }
     setLoading(false);
   };
@@ -99,44 +122,57 @@ export default function AdminHome() {
     setContent(prev => ({ ...prev, [field]: value }));
   };
 
-  // Upload Foto Kepala Sekolah
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload Foto 1 - Kepala Sekolah
+  const handlePhoto1Upload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    setUploading(true);
+    setUploading1(true);
 
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `kepsek-${Date.now()}.${fileExt}`;
-
-      // Upload ke Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('home-images')           // ← Buat bucket ini di Supabase
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: true,
-        });
+      const fileName = `kepsek-${Date.now()}.${file.name.split('.').pop()}`;
+      const { error } = await supabase.storage
+        .from('home-images')
+        .upload(fileName, file, { upsert: true });
 
       if (error) throw error;
 
-      // Dapatkan public URL
-      const { data: publicUrlData } = supabase.storage
-        .from('home-images')
-        .getPublicUrl(fileName);
-
-      const newUrl = publicUrlData.publicUrl;
+      const { data: urlData } = supabase.storage.from('home-images').getPublicUrl(fileName);
+      const newUrl = urlData.publicUrl;
 
       updateField('foto1_url', newUrl);
-      setPreviewUrl(newUrl);
-
-      setMessage('✅ Foto berhasil diupload!');
-      setTimeout(() => setMessage(''), 2500);
-
-    } catch (error: any) {
-      setMessage('❌ Gagal upload foto: ' + error.message);
+      setPreview1(newUrl);
+      setMessage('✅ Foto Kepala Sekolah berhasil diupload!');
+    } catch (err: any) {
+      setMessage('❌ Gagal upload foto 1: ' + err.message);
     } finally {
-      setUploading(false);
+      setUploading1(false);
+    }
+  };
+
+  // Upload Foto 2
+  const handlePhoto2Upload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading2(true);
+
+    try {
+      const fileName = `foto2-${Date.now()}.${file.name.split('.').pop()}`;
+      const { error } = await supabase.storage
+        .from('home-images')
+        .upload(fileName, file, { upsert: true });
+
+      if (error) throw error;
+
+      const { data: urlData } = supabase.storage.from('home-images').getPublicUrl(fileName);
+      const newUrl = urlData.publicUrl;
+
+      updateField('foto2_url', newUrl);
+      setPreview2(newUrl);
+      setMessage('✅ Foto Tambahan berhasil diupload!');
+    } catch (err: any) {
+      setMessage('❌ Gagal upload foto 2: ' + err.message);
+    } finally {
+      setUploading2(false);
     }
   };
 
@@ -157,6 +193,14 @@ export default function AdminHome() {
     updateField('stats', newStats);
   };
 
+  const addStat = () => {
+    updateField('stats', [...content.stats, { value: '', label: '' }]);
+  };
+
+  const removeStat = (index: number) => {
+    updateField('stats', content.stats.filter((_, i) => i !== index));
+  };
+
   if (loading) return <div className="p-10 text-center">Memuat data...</div>;
 
   return (
@@ -165,7 +209,7 @@ export default function AdminHome() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Edit Halaman Utama</h1>
-            <p className="text-gray-600">Kelola konten yang tampil di beranda website</p>
+            <p className="text-gray-600">Kelola semua konten yang tampil di beranda website</p>
           </div>
           <button
             onClick={handleSave}
@@ -181,13 +225,12 @@ export default function AdminHome() {
         {/* Hero Section */}
         <div className="bg-white rounded-2xl shadow p-8 mb-8">
           <h2 className="text-xl font-semibold mb-6">🌟 Hero Section</h2>
-          {/* ... (tetap sama seperti sebelumnya) */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium mb-2">Hero Title</label>
               <input type="text" value={content.hero_title} onChange={(e) => updateField('hero_title', e.target.value)} className="w-full border rounded-lg px-4 py-3" />
             </div>
-            <div>
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-2">Hero Subtitle</label>
               <textarea value={content.hero_subtitle} onChange={(e) => updateField('hero_subtitle', e.target.value)} className="w-full border rounded-lg px-4 py-3 h-24" />
             </div>
@@ -198,41 +241,20 @@ export default function AdminHome() {
           </div>
         </div>
 
-        {/* Sambutan Kepala Sekolah - Dengan Upload Foto */}
+        {/* Sambutan Kepala Sekolah */}
         <div className="bg-white rounded-2xl shadow p-8 mb-8">
           <h2 className="text-xl font-semibold mb-6">👨‍🏫 Sambutan Kepala Sekolah</h2>
-          
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Upload & Preview Foto */}
             <div>
-              <label className="block text-sm font-medium mb-2">Foto Kepala Sekolah</label>
-              
-              <div className="mb-4">
-                {previewUrl && (
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border">
-                    <Image 
-                      src={previewUrl} 
-                      alt="Preview" 
-                      fill 
-                      className="object-cover" 
-                    />
-                  </div>
-                )}
-              </div>
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                disabled={uploading}
-                className="w-full border border-dashed border-gray-300 rounded-xl p-4 text-sm cursor-pointer hover:border-blue-400 transition-colors"
-              />
-              <p className="text-xs text-gray-500 mt-2">
-                {uploading ? 'Mengupload foto...' : 'Format: JPG, PNG, Max 5MB'}
-              </p>
+              <label className="block text-sm font-medium mb-3">Foto Kepala Sekolah</label>
+              {preview1 && (
+                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border mb-4">
+                  <Image src={preview1} alt="Preview" fill className="object-cover" />
+                </div>
+              )}
+              <input type="file" accept="image/*" onChange={handlePhoto1Upload} disabled={uploading1} className="w-full border border-dashed border-gray-300 rounded-xl p-4 cursor-pointer" />
             </div>
 
-            {/* Informasi Lainnya */}
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2">Caption Foto</label>
@@ -254,9 +276,74 @@ export default function AdminHome() {
           </div>
         </div>
 
-        {/* Visi, Misi, Stats tetap sama seperti sebelumnya */}
-        {/* ... (saya singkat agar tidak terlalu panjang) */}
+        {/* Visi & Misi */}
+        <div className="bg-white rounded-2xl shadow p-8 mb-8">
+          <h2 className="text-xl font-semibold mb-6">🎯 Visi & Misi</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <label className="block text-sm font-medium mb-2">Visi</label>
+              <textarea value={content.visi} onChange={(e) => updateField('visi', e.target.value)} className="w-full border rounded-lg px-4 py-3 h-40" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-3">Misi</label>
+              {content.misi.map((item, index) => (
+                <div key={index} className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    value={item}
+                    onChange={(e) => updateMisi(index, e.target.value)}
+                    className="flex-1 border rounded-lg px-4 py-3"
+                  />
+                  <button onClick={() => removeMisi(index)} className="px-4 text-red-600 hover:bg-red-50 rounded-lg">✕</button>
+                </div>
+              ))}
+              <button onClick={addMisi} className="text-blue-600 hover:underline text-sm mt-2">+ Tambah Misi</button>
+            </div>
+          </div>
+        </div>
 
+        {/* Statistik */}
+        <div className="bg-white rounded-2xl shadow p-8 mb-8">
+          <h2 className="text-xl font-semibold mb-6">📊 Statistik</h2>
+          {content.stats.map((stat, index) => (
+            <div key={index} className="grid grid-cols-2 gap-4 mb-4 p-4 border rounded-xl">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Value</label>
+                <input type="text" value={stat.value} onChange={(e) => updateStat(index, 'value', e.target.value)} className="w-full border rounded-lg px-4 py-3" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Label</label>
+                <input type="text" value={stat.label} onChange={(e) => updateStat(index, 'label', e.target.value)} className="w-full border rounded-lg px-4 py-3" />
+              </div>
+              <button onClick={() => removeStat(index)} className="col-span-2 text-red-600 text-sm hover:underline">Hapus Statistik</button>
+            </div>
+          ))}
+          <button onClick={addStat} className="text-blue-600 hover:underline text-sm">+ Tambah Statistik</button>
+        </div>
+
+        {/* Foto Tambahan 2 */}
+        <div className="bg-white rounded-2xl shadow p-8">
+          <h2 className="text-xl font-semibold mb-6">🖼️ Foto Tambahan (Foto 2)</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              {preview2 && (
+                <div className="relative w-full aspect-video rounded-2xl overflow-hidden border mb-4">
+                  <Image src={preview2} alt="Preview 2" fill className="object-cover" />
+                </div>
+              )}
+              <input type="file" accept="image/*" onChange={handlePhoto2Upload} disabled={uploading2} className="w-full border border-dashed border-gray-300 rounded-xl p-4 cursor-pointer" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Caption Foto 2</label>
+              <input 
+                type="text" 
+                value={content.foto2_caption || ''} 
+                onChange={(e) => updateField('foto2_caption', e.target.value)} 
+                className="w-full border rounded-lg px-4 py-3" 
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
