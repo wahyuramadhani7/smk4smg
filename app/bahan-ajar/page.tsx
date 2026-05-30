@@ -23,65 +23,222 @@ interface BahanAjarContent {
   items: BahanAjarItem[];
 }
 
+/* Accent palette — cycles through cards */
+const ACCENTS = [
+  { border: 'rgba(37,99,235,.35)',  bar: 'rgba(37,99,235,.9)',  soft: 'rgba(37,99,235,.12)', text: '#60a5fa' },
+  { border: 'rgba(8,145,178,.35)',  bar: 'rgba(8,145,178,.9)',  soft: 'rgba(8,145,178,.12)', text: '#38bdf8' },
+  { border: 'rgba(79,70,229,.35)',  bar: 'rgba(79,70,229,.9)',  soft: 'rgba(79,70,229,.12)', text: '#a5b4fc' },
+  { border: 'rgba(16,185,129,.35)', bar: 'rgba(16,185,129,.9)', soft: 'rgba(16,185,129,.12)', text: '#6ee7b7' },
+  { border: 'rgba(245,158,11,.35)', bar: 'rgba(245,158,11,.9)', soft: 'rgba(245,158,11,.12)', text: '#fcd34d' },
+  { border: 'rgba(239,68,68,.35)',  bar: 'rgba(239,68,68,.9)',  soft: 'rgba(239,68,68,.12)', text: '#fca5a5' },
+];
+
 export default function BahanAjar() {
   const [content, setContent] = useState<BahanAjarContent | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchContent = async () => {
+    (async () => {
       const { data } = await supabase
         .from('bahan_ajar_content')
         .select('*')
         .limit(1)
         .single();
-
-      if (data) {
-        setContent(data as BahanAjarContent);
-      }
+      if (data) setContent(data as BahanAjarContent);
       setLoading(false);
-    };
-
-    fetchContent();
+    })();
   }, []);
 
-  if (loading) return <div className="py-20 text-center">Memuat bahan ajar...</div>;
-  if (!content) return <div className="py-20 text-center">Data tidak ditemukan</div>;
+  if (loading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050810' }}>
+        <div style={{ width: 40, height: 40, border: '3px solid rgba(96,165,250,.15)', borderTopColor: '#60a5fa', borderRadius: '50%', animation: 'spin .8s linear infinite' }} />
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      </div>
+    );
+  }
+
+  if (!content) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050810' }}>
+        <p style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'Outfit, sans-serif' }}>Data tidak ditemukan</p>
+      </div>
+    );
+  }
 
   return (
-    <main className="pt-10 pb-20">
-      <div className="max-w-6xl mx-auto px-6">
-        <h1 className="text-4xl font-bold text-center mb-4">{content.main_title}</h1>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          {content.main_subtitle}
-        </p>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {content.items.map((item) => (
-            <div key={item.id} className="bg-white border border-gray-200 rounded-2xl p-7 hover:shadow-lg transition-shadow">
-              <h2 className="text-2xl font-semibold mb-4 flex items-center gap-3">
-                {item.icon} {item.title}
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                {item.description}
-              </p>
-              <div className="bg-gray-50 border border-gray-100 rounded-xl p-5">
-                <h3 className="font-medium text-lg mb-4">Dokumen Tersedia:</h3>
-                <ul className="space-y-3 text-sm">
-                  {item.documents.map((doc, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <span className="text-emerald-600 mt-1">•</span>
-                      <div>
-                        <p className="font-medium">{doc.name}</p>
-                        <p className="text-gray-500">{doc.subtitle}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        @keyframes spin        { to { transform: rotate(360deg); } }
+        @keyframes fadeDown    { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeUp      { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes scaleIn     { from { opacity:0; transform:scale(.93); } to { opacity:1; transform:scale(1); } }
+
+        .ba-title { animation: fadeDown .8s .1s ease both; }
+        .ba-sub   { animation: fadeUp  .8s .25s ease both; }
+
+        .ba-card {
+          transition: transform .3s ease, box-shadow .3s ease;
+          cursor: default;
+        }
+        .ba-card:hover {
+          transform: translateY(-8px);
+        }
+
+        .doc-item {
+          transition: background .2s ease, transform .2s ease;
+        }
+        .doc-item:hover {
+          background: rgba(255,255,255,.06) !important;
+          transform: translateX(6px);
+        }
+      `}</style>
+
+      <main style={{ minHeight: '100vh', background: '#050810', fontFamily: 'Outfit, sans-serif', paddingBottom: 80 }}>
+
+        {/* ── Hero Banner ── */}
+        <section style={{ position: 'relative', padding: '80px 24px 72px', textAlign: 'center', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(37,99,235,.18) 0%, transparent 65%)', pointerEvents: 'none' }} />
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: 'linear-gradient(rgba(37,99,235,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.05) 1px,transparent 1px)',
+            backgroundSize: '60px 60px',
+          }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, #38bdf8, transparent)' }} />
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div className="ba-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block' }} />
+              <span style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#60a5fa' }}>Materi Pembelajaran</span>
+              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block' }} />
             </div>
-          ))}
+            <h1 className="ba-title" style={{
+              fontFamily: 'Bebas Neue, sans-serif',
+              fontSize: 'clamp(2.8rem, 7vw, 5.5rem)',
+              letterSpacing: '.04em', lineHeight: 1,
+              color: '#fff', margin: '0 0 20px',
+            }}>
+              {content.main_title}
+            </h1>
+            <p className="ba-sub" style={{
+              fontSize: 'clamp(.95rem, 1.8vw, 1.1rem)',
+              color: 'rgba(255,255,255,.6)', lineHeight: 1.8,
+              maxWidth: 600, margin: '0 auto 24px',
+            }}>
+              {content.main_subtitle}
+            </p>
+            <div style={{ width: 80, height: 4, borderRadius: 9999, background: 'linear-gradient(90deg, #2563eb, #38bdf8)', margin: '0 auto' }} />
+          </div>
+        </section>
+
+        {/* ── Cards Grid ── */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 0' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: 24,
+          }}>
+            {content.items.map((item, idx) => {
+              const accent = ACCENTS[idx % ACCENTS.length];
+              const animDelay = `${0.1 + idx * 0.1}s`;
+
+              return (
+                <div
+                  key={item.id}
+                  className="ba-card"
+                  style={{
+                    borderRadius: 20,
+                    border: `1px solid ${accent.border}`,
+                    overflow: 'hidden',
+                    animation: `scaleIn .7s ${animDelay} ease both`,
+                    display: 'flex', flexDirection: 'column',
+                  }}
+                >
+                  {/* Top accent bar */}
+                  <div style={{ height: 4, background: `linear-gradient(90deg, ${accent.bar}, transparent)`, flexShrink: 0 }} />
+
+                  {/* Card body */}
+                  <div style={{ padding: '28px 28px 0', background: 'rgba(255,255,255,.03)', flex: 1 }}>
+                    {/* Icon + Title */}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 16 }}>
+                      <div style={{
+                        width: 48, height: 48, borderRadius: 14, flexShrink: 0,
+                        background: accent.soft,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '1.5rem',
+                      }}>
+                        {item.icon}
+                      </div>
+                      <h2 style={{
+                        fontFamily: 'Bebas Neue, sans-serif',
+                        fontSize: '1.45rem', letterSpacing: '.05em',
+                        color: '#fff', margin: 0, lineHeight: 1.2, paddingTop: 4,
+                      }}>
+                        {item.title}
+                      </h2>
+                    </div>
+
+                    {/* Description */}
+                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,.65)', lineHeight: 1.8, marginBottom: 24 }}>
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Documents list */}
+                  <div style={{
+                    margin: '0 20px 20px',
+                    borderRadius: 14,
+                    border: '1px solid rgba(255,255,255,.07)',
+                    background: 'rgba(0,0,0,.2)',
+                    overflow: 'hidden',
+                  }}>
+                    <div style={{
+                      padding: '10px 16px',
+                      borderBottom: '1px solid rgba(255,255,255,.06)',
+                      display: 'flex', alignItems: 'center', gap: 8,
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={accent.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                      </svg>
+                      <span style={{ fontSize: 11, letterSpacing: '.25em', textTransform: 'uppercase', fontWeight: 600, color: accent.text }}>
+                        Dokumen Tersedia
+                      </span>
+                    </div>
+
+                    <ul style={{ listStyle: 'none', padding: '8px 0', margin: 0 }}>
+                      {item.documents.map((doc, i) => (
+                        <li
+                          key={i}
+                          className="doc-item"
+                          style={{
+                            display: 'flex', alignItems: 'flex-start', gap: 12,
+                            padding: '10px 16px',
+                            borderBottom: i < item.documents.length - 1 ? '1px solid rgba(255,255,255,.05)' : 'none',
+                          }}
+                        >
+                          <span style={{
+                            marginTop: 2, flexShrink: 0,
+                            width: 6, height: 6, borderRadius: '50%',
+                            background: accent.text,
+                            display: 'inline-block',
+                          }} />
+                          <div>
+                            <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,.8)', margin: '0 0 2px' }}>{doc.name}</p>
+                            <p style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', margin: 0 }}>{doc.subtitle}</p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
