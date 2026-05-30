@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import Image from 'next/image';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,17 +19,16 @@ interface HomeContent {
   visi: string;
   misi: string[];
   stats: { value: string; label: string }[];
-  kepsek_photo_url: string;
-  kepsek_photo_caption: string;
+  foto1_url: string;
+  foto1_caption: string;
+  foto2_url: string;
+  foto2_caption: string;
 }
 
 const DEFAULT: HomeContent = {
   hero_title: 'SMK 4 Semarang',
   hero_subtitle: 'Sekolah vokasi unggulan berbasis industri yang mencetak generasi kompeten dan berkarakter.',
-  
-  // Banner utama (diambil dari tema SMKN 4 Semarang)
   hero_bg_url: 'https://images.unsplash.com/photo-1594737625785-6c2e9d3b8f3e?q=80&w=2070&fit=crop',
-  
   sambutan_kutipan: 'Kami berkomitmen untuk mencetak generasi muda yang kompeten, kreatif, dan siap memasuki dunia industri melalui pendidikan vokasi yang berkualitas.',
   sambutan_nama: 'Drs. Ahmad Santoso, M.Pd.',
   sambutan_jabatan: 'Kepala Sekolah SMK 4 Semarang',
@@ -45,23 +45,42 @@ const DEFAULT: HomeContent = {
     { value: '7', label: 'Program Keahlian' },
     { value: '52', label: 'Mitra Industri' },
   ],
-  kepsek_photo_url: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=800',
-  kepsek_photo_caption: 'Kepala Sekolah SMK 4 Semarang',
+  foto1_url: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=800',
+  foto1_caption: 'Kepala Sekolah SMK 4 Semarang',
+  foto2_url: '',
+  foto2_caption: '',
 };
 
 export default function Home() {
   const [c, setC] = useState<HomeContent>(DEFAULT);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase
-      .from('home_content')
-      .select('*')
-      .limit(1)
-      .single()
-      .then(({ data }) => {
-        if (data) setC(data as HomeContent);
-      });
+    const fetchContent = async () => {
+      const { data, error } = await supabase
+        .from('home_content')
+        .select('*')
+        .limit(1)
+        .single();
+
+      if (data) {
+        setC(data as HomeContent);
+      } else {
+        setC(DEFAULT);
+      }
+      setLoading(false);
+    };
+
+    fetchContent();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Memuat halaman...
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen font-sans">
@@ -102,23 +121,26 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
       </section>
 
-      {/* ── Sambutan Kepala Sekolah (Foto + Kutipan Menyatu) ── */}
+      {/* ── Sambutan Kepala Sekolah ── */}
       <section id="sambutan" className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-12 gap-10 items-center">
             {/* Foto Kepala Sekolah */}
             <div className="md:col-span-5">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src={c.kepsek_photo_url}
-                  alt={c.kepsek_photo_caption}
+                <Image
+                  src={c.foto1_url || '/placeholder-kepsek.jpg'}
+                  alt={c.foto1_caption}
+                  width={600}
+                  height={450}
                   className="w-full aspect-[4/3] object-cover"
+                  priority
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent h-1/3" />
               </div>
             </div>
 
-            {/* Sambutan */}
+            {/* Isi Sambutan */}
             <div className="md:col-span-7">
               <p className="text-xs tracking-[0.3em] uppercase text-blue-500 font-semibold mb-3">
                 Sambutan Kepala Sekolah
@@ -192,8 +214,8 @@ export default function Home() {
           </p>
           <h2 className="text-3xl md:text-4xl font-bold mb-14">Sekolah Kami</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {c.stats.map((s) => (
-              <div key={s.label} className="bg-white/5 border border-white/10 rounded-2xl py-8 px-4">
+            {c.stats.map((s, index) => (
+              <div key={index} className="bg-white/5 border border-white/10 rounded-2xl py-8 px-4">
                 <div className="text-4xl md:text-5xl font-extrabold text-blue-400 mb-2">
                   {s.value}
                 </div>
