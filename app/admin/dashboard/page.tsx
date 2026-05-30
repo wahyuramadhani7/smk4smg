@@ -53,6 +53,14 @@ const menuItems: MenuItem[] = [
     badge: 'Materi',
   },
   {
+    title: 'Kelola ICT',
+    description: 'Kelola perangkat, software, laboratorium, dan infrastruktur ICT.',
+    href: '/admin/ict',
+    icon: '💻',
+    color: '#06b6d4',
+    badge: 'ICT',
+  },
+  {
     title: 'Edit Konten',
     description: 'Ubah teks, gambar, dan info yang tampil di halaman publik.',
     href: '/admin/konten',
@@ -94,6 +102,7 @@ export default function AdminDashboard() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Sora:wght@600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
+        
         .admin-card {
           background: #ffffff;
           border: 1.5px solid #e2e8f0;
@@ -123,6 +132,7 @@ export default function AdminDashboard() {
         }
         .admin-card:hover::before { opacity: 1; }
         .admin-card:hover .card-arrow { transform: translateX(3px); opacity: 1; }
+
         .card-arrow {
           opacity: 0.4;
           transition: transform 0.18s ease, opacity 0.18s ease;
@@ -301,7 +311,10 @@ export default function AdminDashboard() {
 
                 <button
                   className="card-edit-btn"
-                  onClick={(e) => { e.stopPropagation(); router.push(item.href); }}
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    router.push(item.href); 
+                  }}
                 >
                   ✏️ Edit Sekarang
                 </button>
