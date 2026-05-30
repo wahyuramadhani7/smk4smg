@@ -29,6 +29,14 @@ const menuItems: MenuItem[] = [
     badge: 'Konten',
   },
   {
+    title: 'Kelola Jurusan',
+    description: 'Kelola profil, deskripsi, kompetensi, dan informasi setiap jurusan.',
+    href: '/admin/jurusan',
+    icon: '🎓',
+    color: '#f97316',
+    badge: 'Jurusan',
+  },
+  {
     title: 'Bahan Ajar',
     description: 'Kelola kartu bahan ajar, dokumen, dan deskripsi.',
     href: '/admin/bahan-ajar',
@@ -252,7 +260,7 @@ export default function AdminDashboard() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: '1.1rem',
           }}>
-            {menuItems.map((item, index) => (
+            {menuItems.map((item) => (
               <div
                 key={item.href}
                 className="admin-card"
