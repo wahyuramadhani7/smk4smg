@@ -22,11 +22,19 @@ const menuItems: MenuItem[] = [
   },
   {
     title: 'Profil Kurikulum',
-    description: 'Edit teks, tujuan pembelajaran, dan upload dokumen PDF kurikulum.',
+    description: 'Edit teks, tujuan pembelajaran, dan struktur kurikulum.',
     href: '/admin/kurikulum',
     icon: '📘',
     color: '#6366f1',
     badge: 'Konten',
+  },
+  {
+    title: 'Bahan Ajar',
+    description: 'Kelola kartu bahan ajar, dokumen, dan deskripsi untuk halaman Bahan Ajar.',
+    href: '/admin/bahan-ajar',
+    icon: '📚',
+    color: '#8b5cf6',
+    badge: 'Materi',
   },
   {
     title: 'Tambah Materi',
@@ -145,6 +153,8 @@ export default function AdminDashboard() {
         .admin-card:nth-child(4) { animation-delay: 0.20s }
         .admin-card:nth-child(5) { animation-delay: 0.25s }
         .admin-card:nth-child(6) { animation-delay: 0.30s }
+        .admin-card:nth-child(7) { animation-delay: 0.35s }
+        .admin-card:nth-child(8) { animation-delay: 0.40s }
       `}</style>
 
       <Navbar />
@@ -239,7 +249,6 @@ export default function AdminDashboard() {
                 style={{ '--card-color': item.color } as React.CSSProperties}
                 onClick={() => router.push(item.href)}
               >
-                {/* Top row */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                   <div style={{
                     width: 44,
@@ -290,7 +299,6 @@ export default function AdminDashboard() {
                   <span className="card-arrow">→</span>
                 </div>
 
-                {/* Edit button */}
                 <button
                   className="card-edit-btn"
                   onClick={(e) => { e.stopPropagation(); router.push(item.href); }}
