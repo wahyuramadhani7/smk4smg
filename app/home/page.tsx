@@ -83,7 +83,7 @@ export default function Home() {
           <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-4 tracking-tight">
             {c.hero_title.split('SMK 4').length > 1 ? (
               <>
-                SMK 4 <span className="text-blue-400">Semarang</span>
+                SMK NEGERI 4 <span className="text-blue-400">SEMARANG</span>
               </>
             ) : (
               c.hero_title

@@ -3,68 +3,69 @@ export default function ICT() {
     <main className="pt-10 pb-20">
       <div className="max-w-5xl mx-auto px-6">
         <h1 className="text-4xl font-bold text-center mb-4">ICT</h1>
-        <p className="text-center text-gray-600 mb-12">
-          Information and Communication Technology - SMK 4 Semarang
+        <p className="text-center text-gray-600 mb-16">
+          Information and Communication Technology<br />
+          SMK Negeri 4 Semarang
         </p>
 
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* LMS Siswa */}
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-3xl p-8 shadow-lg flex flex-col justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">🚀 LMS Siswa</h2>
-              <p className="text-blue-100 leading-relaxed mb-6">
-                Akses materi pembelajaran, tugas, kuis, dan nilai secara online.
-                Platform Learning Management System untuk seluruh siswa SMK 4 Semarang.
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          
+          {/* LMS SMKN 4 Semarang */}
+          <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-3xl p-8 shadow-xl flex flex-col">
+            <div className="flex-1">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
+                🚀
+              </div>
+              <h2 className="text-2xl font-semibold mb-3">LMS SMKN 4 Semarang</h2>
+              <p className="text-blue-100 leading-relaxed">
+                Platform pembelajaran daring untuk mengakses materi pelajaran, 
+                tugas, kuis, dan diskusi antar siswa dan guru.
               </p>
             </div>
-
+            
             <a
-              href="https://lms.smk4semarang.sch.id" 
+              href="https://lms.smk4semarang.sch.id"
               target="_blank"
               rel="noopener noreferrer"
-              className="block bg-white text-blue-700 text-center font-semibold py-3.5 px-6 rounded-2xl hover:bg-blue-50 transition-all text-lg mt-4"
+              className="mt-8 block bg-white text-blue-700 font-semibold text-center py-4 px-6 rounded-2xl hover:bg-blue-50 transition-all text-lg"
             >
-              Masuk ke LMS Siswa →
+              Akses LMS Siswa →
             </a>
           </div>
 
-          {/* Informasi Lainnya */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-6">Fasilitas ICT</h2>
-            
-            <div className="space-y-6">
-              <div className="border-l-4 border-blue-600 pl-4">
-                <h3 className="font-medium text-lg">Laboratorium Komputer</h3>
-                <p className="text-gray-600 mt-1">
-                  Tersedia 3 lab komputer dengan total 90 unit PC dan 1 lab multimedia.
-                </p>
+          {/* E-Raport */}
+          <div className="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-3xl p-8 shadow-xl flex flex-col">
+            <div className="flex-1">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
+                📊
               </div>
-
-              <div className="border-l-4 border-blue-600 pl-4">
-                <h3 className="font-medium text-lg">Jaringan & Internet</h3>
-                <p className="text-gray-600 mt-1">
-                  Akses internet fiber optic untuk mendukung pembelajaran daring.
-                </p>
-              </div>
-
-              <div className="border-l-4 border-blue-600 pl-4">
-                <h3 className="font-medium text-lg">Program Unggulan</h3>
-                <ul className="list-disc pl-5 mt-2 text-gray-600 space-y-1">
-                  <li>Web Development</li>
-                  <li>Networking & Cybersecurity</li>
-                  <li>Digital Content Creation</li>
-                  <li>Programming (Python, JavaScript)</li>
-                </ul>
-              </div>
+              <h2 className="text-2xl font-semibold mb-3">E-Raport SMKN 4 Semarang</h2>
+              <p className="text-emerald-100 leading-relaxed">
+                Sistem rapor elektronik untuk melihat nilai, rapor semester, 
+                dan rekapitulasi prestasi siswa secara online.
+              </p>
             </div>
+            
+            <a
+              href="https://erapor.smk4semarang.sch.id" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 block bg-white text-emerald-700 font-semibold text-center py-4 px-6 rounded-2xl hover:bg-emerald-50 transition-all text-lg"
+            >
+              Akses E-Raport →
+            </a>
           </div>
+
         </div>
 
         {/* Informasi Tambahan */}
-        <div className="mt-16 text-center">
-          <p className="text-sm text-gray-500">
-            Butuh bantuan akses LMS? Hubungi Tim ICT SMK 4 Semarang
-          </p>
+        <div className="mt-16 text-center max-w-md mx-auto">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+            <p className="text-gray-600 text-sm">
+              Butuh bantuan login atau mengalami kendala teknis?<br />
+              Silakan hubungi <span className="font-medium text-gray-800">Tim ICT SMK 4 Semarang</span>
+            </p>
+          </div>
         </div>
       </div>
     </main>
