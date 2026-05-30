@@ -14,7 +14,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     title: 'Edit Halaman Utama',
-    description: 'Edit hero, sambutan, visi misi, statistik, dan upload 2 foto galeri.',
+    description: 'Edit hero, sambutan, visi misi, statistik, dan upload foto.',
     href: '/admin/home',
     icon: '🏠',
     color: '#14b8a6',
@@ -30,11 +30,19 @@ const menuItems: MenuItem[] = [
   },
   {
     title: 'Bahan Ajar',
-    description: 'Kelola kartu bahan ajar, dokumen, dan deskripsi untuk halaman Bahan Ajar.',
+    description: 'Kelola kartu bahan ajar, dokumen, dan deskripsi.',
     href: '/admin/bahan-ajar',
     icon: '📚',
     color: '#8b5cf6',
     badge: 'Materi',
+  },
+  {
+    title: 'Evaluasi & Assesmen',
+    description: 'Kelola ATS, AS, mata pelajaran, kejuruan, dan jadwal penilaian.',
+    href: '/admin/evaluasi',
+    icon: '📊',
+    color: '#ef4444',
+    badge: 'Evaluasi',
   },
   {
     title: 'Tambah Materi',
@@ -72,7 +80,7 @@ const menuItems: MenuItem[] = [
     title: 'Laporan & Statistik',
     description: 'Pantau aktivitas dan unduh laporan penggunaan website.',
     href: '/admin/laporan',
-    icon: '📊',
+    icon: '📈',
     color: '#8b5cf6',
     badge: 'Data',
   },
@@ -147,14 +155,6 @@ export default function AdminDashboard() {
           to   { opacity: 1; transform: translateY(0); }
         }
         .admin-card { animation: fadeUp 0.35s ease both; }
-        .admin-card:nth-child(1) { animation-delay: 0.05s }
-        .admin-card:nth-child(2) { animation-delay: 0.10s }
-        .admin-card:nth-child(3) { animation-delay: 0.15s }
-        .admin-card:nth-child(4) { animation-delay: 0.20s }
-        .admin-card:nth-child(5) { animation-delay: 0.25s }
-        .admin-card:nth-child(6) { animation-delay: 0.30s }
-        .admin-card:nth-child(7) { animation-delay: 0.35s }
-        .admin-card:nth-child(8) { animation-delay: 0.40s }
       `}</style>
 
       <Navbar />
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
         minHeight: '100vh',
         paddingBottom: '4rem',
       }}>
-        {/* ── Header banner ── */}
+        {/* Header banner */}
         <div style={{
           background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
           padding: '3rem 2rem 2.5rem',
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ── Grid menu ── */}
+        {/* Grid Menu */}
         <div style={{ maxWidth: 1100, margin: '2.5rem auto', padding: '0 1.5rem' }}>
           <h2 style={{
             fontFamily: "'Sora', sans-serif",
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: '1.1rem',
           }}>
-            {menuItems.map((item) => (
+            {menuItems.map((item, index) => (
               <div
                 key={item.href}
                 className="admin-card"

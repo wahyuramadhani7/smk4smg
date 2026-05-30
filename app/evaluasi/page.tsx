@@ -1,12 +1,55 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+interface EvaluasiContent {
+  main_title: string;
+  main_subtitle: string;
+  ats_title: string;
+  ats_description: string;
+  ats_schedule: string;
+  as_title: string;
+  mapel_title: string;
+  mapel_items: { name: string; subtitle: string }[];
+  kejuruan_title: string;
+  kejuruan_items: { name: string; subtitle: string }[];
+  footer_text: string;
+}
+
 export default function Evaluasi() {
+  const [content, setContent] = useState<EvaluasiContent | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      const { data } = await supabase
+        .from('evaluasi_content')
+        .select('*')
+        .limit(1)
+        .single();
+
+      if (data) setContent(data as EvaluasiContent);
+      setLoading(false);
+    };
+
+    fetchContent();
+  }, []);
+
+  if (loading) return <div className="py-20 text-center">Memuat halaman evaluasi...</div>;
+  if (!content) return <div className="py-20 text-center">Data tidak ditemukan</div>;
+
   return (
     <main className="pt-10 pb-20">
       <div className="max-w-5xl mx-auto px-6">
-        <h1 className="text-4xl font-bold text-center mb-4">
-          Evaluasi & Assesmen
-        </h1>
+        <h1 className="text-4xl font-bold text-center mb-4">{content.main_title}</h1>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Rencana Kegiatan Asesmen SMK 4 Semarang Tahun Ajaran 2025/2026
+          {content.main_subtitle}
         </p>
 
         <div className="bg-white shadow-lg rounded-3xl p-10 mb-12">
@@ -17,94 +60,59 @@ export default function Evaluasi() {
           {/* ATS */}
           <div className="mb-12">
             <h3 className="text-2xl font-semibold flex items-center gap-3 mb-6">
-              📍 ATS - Assessment Tengah Semester
+              {content.ats_title}
             </h3>
-            <p className="text-gray-600 mb-6">
-              Penilaian tengah semester untuk memantau perkembangan siswa secara berkala.
-            </p>
-            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6">
+            <p className="text-gray-600 mb-6">{content.ats_description}</p>
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 whitespace-pre-line">
               <p className="font-medium text-blue-700">Dilaksanakan pada:</p>
-              <p className="text-gray-700">September & November 2025 (Semester 1)</p>
-              <p className="text-gray-700">Maret & Mei 2026 (Semester 2)</p>
+              <p className="text-gray-700">{content.ats_schedule}</p>
             </div>
           </div>
 
           {/* AS - Assessment Sumatif */}
           <div>
             <h3 className="text-2xl font-semibold flex items-center gap-3 mb-8">
-              📊 AS - Assessment Sumatif
+              {content.as_title}
             </h3>
             
             <div className="grid md:grid-cols-2 gap-8">
               {/* Mapel */}
               <div className="bg-white border border-gray-200 rounded-2xl p-7">
-                <h4 className="font-semibold text-xl mb-5 text-indigo-700">Mata Pelajaran (Mapel)</h4>
+                <h4 className="font-semibold text-xl mb-5 text-indigo-700">{content.mapel_title}</h4>
                 <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <span className="text-indigo-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">ASAS - Assessment Sumatif Akhir Semester</p>
-                      <p className="text-sm text-gray-500">Akhir Semester 1 & 2</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-indigo-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">ASAT - Assessment Sumatif Akhir Tahun</p>
-                      <p className="text-sm text-gray-500">Juni 2026</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-indigo-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">ASAJ - Assessment Sumatif Akhir Jenjang</p>
-                      <p className="text-sm text-gray-500">Kelas XII</p>
-                    </div>
-                  </li>
+                  {content.mapel_items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="text-indigo-600 mt-1.5">•</span>
+                      <div>
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-sm text-gray-500">{item.subtitle}</p>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               {/* Kejuruan */}
               <div className="bg-white border border-gray-200 rounded-2xl p-7">
-                <h4 className="font-semibold text-xl mb-5 text-emerald-700">Kejuruan / Kompetensi Keahlian</h4>
+                <h4 className="font-semibold text-xl mb-5 text-emerald-700">{content.kejuruan_title}</h4>
                 <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">Presentasi Proyek Akhir</p>
-                      <p className="text-sm text-gray-500">Semester 2</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">TKA - Tes Kompetensi Akademik</p>
-                      <p className="text-sm text-gray-500">Semester 1 & 2</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">UKK - Ujian Kompetensi Keahlian</p>
-                      <p className="text-sm text-gray-500">Kelas XII</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-600 mt-1.5">•</span>
-                    <div>
-                      <p className="font-medium">ANBK - Assessment Nasional Berbasis Komputer</p>
-                      <p className="text-sm text-gray-500">Sesuai jadwal nasional</p>
-                    </div>
-                  </li>
+                  {content.kejuruan_items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="text-emerald-600 mt-1.5">•</span>
+                      <div>
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-sm text-gray-500">{item.subtitle}</p>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="text-center text-gray-500 text-sm">
-          <p>Jadwal pelaksanaan asesmen dapat berubah sesuai kebijakan sekolah dan pemerintah.</p>
-          <p className="mt-2">Untuk dokumen lengkap dan jadwal detail, silakan hubungi Tim Kurikulum atau Wakil Kepala Sekolah Bidang Kurikulum.</p>
+        <div className="text-center text-gray-500 text-sm whitespace-pre-line">
+          {content.footer_text}
         </div>
       </div>
     </main>
