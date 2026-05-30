@@ -435,7 +435,7 @@ export default function Navbar() {
                 <span>4</span>
               </div>
               <div>
-                <p className="logo-text-main">SMKN 4 SEMARANG</p>
+                <p className="logo-text-main">SMK NEGERI 4 SEMARANG</p>
                 <p className="logo-text-sub">Semarang · Jawa Tengah</p>
               </div>
             </Link>
