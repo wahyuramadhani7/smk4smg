@@ -8,13 +8,19 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+interface DocumentItem {
+  name: string;
+  subtitle: string;
+  drive_link?: string;
+}
+
 interface BahanAjarItem {
   id: number;
   title: string;
   icon: string;
   description: string;
   color: string;
-  documents: { name: string; subtitle: string }[];
+  documents: DocumentItem[];
 }
 
 interface BahanAjarContent {
@@ -23,15 +29,20 @@ interface BahanAjarContent {
   items: BahanAjarItem[];
 }
 
-/* Accent palette — cycles through cards */
+/* Accent palette */
 const ACCENTS = [
-  { border: 'rgba(37,99,235,.35)',  bar: 'rgba(37,99,235,.9)',  soft: 'rgba(37,99,235,.12)', text: '#60a5fa' },
-  { border: 'rgba(8,145,178,.35)',  bar: 'rgba(8,145,178,.9)',  soft: 'rgba(8,145,178,.12)', text: '#38bdf8' },
-  { border: 'rgba(79,70,229,.35)',  bar: 'rgba(79,70,229,.9)',  soft: 'rgba(79,70,229,.12)', text: '#a5b4fc' },
+  { border: 'rgba(37,99,235,.35)', bar: 'rgba(37,99,235,.9)', soft: 'rgba(37,99,235,.12)', text: '#60a5fa' },
+  { border: 'rgba(8,145,178,.35)', bar: 'rgba(8,145,178,.9)', soft: 'rgba(8,145,178,.12)', text: '#38bdf8' },
+  { border: 'rgba(79,70,229,.35)', bar: 'rgba(79,70,229,.9)', soft: 'rgba(79,70,229,.12)', text: '#a5b4fc' },
   { border: 'rgba(16,185,129,.35)', bar: 'rgba(16,185,129,.9)', soft: 'rgba(16,185,129,.12)', text: '#6ee7b7' },
   { border: 'rgba(245,158,11,.35)', bar: 'rgba(245,158,11,.9)', soft: 'rgba(245,158,11,.12)', text: '#fcd34d' },
-  { border: 'rgba(239,68,68,.35)',  bar: 'rgba(239,68,68,.9)',  soft: 'rgba(239,68,68,.12)', text: '#fca5a5' },
+  { border: 'rgba(239,68,68,.35)', bar: 'rgba(239,68,68,.9)', soft: 'rgba(239,68,68,.12)', text: '#fca5a5' },
 ];
+
+const isDriveLink = (url?: string): boolean => {
+  if (!url) return false;
+  return url.startsWith('https://drive.google.com') || url.startsWith('https://docs.google.com');
+};
 
 export default function BahanAjar() {
   const [content, setContent] = useState<BahanAjarContent | null>(null);
@@ -39,12 +50,26 @@ export default function BahanAjar() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('bahan_ajar_content')
         .select('*')
         .limit(1)
         .single();
-      if (data) setContent(data as BahanAjarContent);
+
+      if (data) {
+        // Backward compatibility
+        const normalized: BahanAjarContent = {
+          ...data,
+          items: data.items.map((item: any) => ({
+            ...item,
+            documents: item.documents.map((doc: any) => ({
+              drive_link: '',
+              ...doc,
+            }))
+          }))
+        };
+        setContent(normalized);
+      }
       setLoading(false);
     })();
   }, []);
@@ -81,24 +106,31 @@ export default function BahanAjar() {
 
         .ba-card {
           transition: transform .3s ease, box-shadow .3s ease;
-          cursor: default;
         }
         .ba-card:hover {
           transform: translateY(-8px);
         }
 
         .doc-item {
-          transition: background .2s ease, transform .2s ease;
+          transition: all .2s ease;
         }
         .doc-item:hover {
           background: rgba(255,255,255,.06) !important;
           transform: translateX(6px);
         }
+
+        .doc-link {
+          color: inherit;
+          text-decoration: none;
+        }
+        .doc-link:hover {
+          color: #60a5fa;
+        }
       `}</style>
 
       <main style={{ minHeight: '100vh', background: '#050810', fontFamily: 'Outfit, sans-serif', paddingBottom: 80 }}>
 
-        {/* ── Hero Banner ── */}
+        {/* Hero Banner */}
         <section style={{ position: 'relative', padding: '80px 24px 72px', textAlign: 'center', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(37,99,235,.18) 0%, transparent 65%)', pointerEvents: 'none' }} />
           <div style={{
@@ -133,7 +165,7 @@ export default function BahanAjar() {
           </div>
         </section>
 
-        {/* ── Cards Grid ── */}
+        {/* Cards Grid */}
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 0' }}>
           <div style={{
             display: 'grid',
@@ -153,15 +185,16 @@ export default function BahanAjar() {
                     border: `1px solid ${accent.border}`,
                     overflow: 'hidden',
                     animation: `scaleIn .7s ${animDelay} ease both`,
-                    display: 'flex', flexDirection: 'column',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    background: 'rgba(255,255,255,.02)',
                   }}
                 >
                   {/* Top accent bar */}
                   <div style={{ height: 4, background: `linear-gradient(90deg, ${accent.bar}, transparent)`, flexShrink: 0 }} />
 
                   {/* Card body */}
-                  <div style={{ padding: '28px 28px 0', background: 'rgba(255,255,255,.03)', flex: 1 }}>
-                    {/* Icon + Title */}
+                  <div style={{ padding: '28px 28px 0', flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 16 }}>
                       <div style={{
                         width: 48, height: 48, borderRadius: 14, flexShrink: 0,
@@ -180,18 +213,17 @@ export default function BahanAjar() {
                       </h2>
                     </div>
 
-                    {/* Description */}
-                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,.65)', lineHeight: 1.8, marginBottom: 24 }}>
+                    <p style={{ fontSize: 14, color: 'rgba(255,255,255,.65)', lineHeight: 1.8, marginBottom: 28 }}>
                       {item.description}
                     </p>
                   </div>
 
-                  {/* Documents list */}
+                  {/* Documents */}
                   <div style={{
-                    margin: '0 20px 20px',
+                    margin: '0 20px 24px',
                     borderRadius: 14,
                     border: '1px solid rgba(255,255,255,.07)',
-                    background: 'rgba(0,0,0,.2)',
+                    background: 'rgba(0,0,0,.25)',
                     overflow: 'hidden',
                   }}>
                     <div style={{
@@ -204,33 +236,66 @@ export default function BahanAjar() {
                         <polyline points="14 2 14 8 20 8"/>
                       </svg>
                       <span style={{ fontSize: 11, letterSpacing: '.25em', textTransform: 'uppercase', fontWeight: 600, color: accent.text }}>
-                        Dokumen Tersedia
+                        DOKUMEN TERSEDIA
                       </span>
                     </div>
 
-                    <ul style={{ listStyle: 'none', padding: '8px 0', margin: 0 }}>
-                      {item.documents.map((doc, i) => (
-                        <li
-                          key={i}
-                          className="doc-item"
-                          style={{
-                            display: 'flex', alignItems: 'flex-start', gap: 12,
-                            padding: '10px 16px',
-                            borderBottom: i < item.documents.length - 1 ? '1px solid rgba(255,255,255,.05)' : 'none',
-                          }}
-                        >
-                          <span style={{
-                            marginTop: 2, flexShrink: 0,
-                            width: 6, height: 6, borderRadius: '50%',
-                            background: accent.text,
-                            display: 'inline-block',
-                          }} />
-                          <div>
-                            <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,.8)', margin: '0 0 2px' }}>{doc.name}</p>
-                            <p style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', margin: 0 }}>{doc.subtitle}</p>
-                          </div>
-                        </li>
-                      ))}
+                    <ul style={{ listStyle: 'none', padding: '6px 0', margin: 0 }}>
+                      {item.documents.map((doc, i) => {
+                        const hasValidLink = isDriveLink(doc.drive_link);
+                        
+                        return (
+                          <li
+                            key={i}
+                            className="doc-item"
+                            style={{
+                              padding: '12px 16px',
+                              borderBottom: i < item.documents.length - 1 ? '1px solid rgba(255,255,255,.05)' : 'none',
+                            }}
+                          >
+                            {hasValidLink ? (
+                              <a
+                                href={doc.drive_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="doc-link"
+                                style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}
+                              >
+                                <span style={{
+                                  marginTop: 3, flexShrink: 0,
+                                  width: 7, height: 7, borderRadius: '50%',
+                                  background: accent.text,
+                                }} />
+                                <div style={{ flex: 1 }}>
+                                  <p style={{ fontSize: 13.5, fontWeight: 600, color: '#e0f2fe', margin: '0 0 3px' }}>
+                                    {doc.name}
+                                  </p>
+                                  <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,.5)', margin: 0 }}>
+                                    {doc.subtitle}
+                                  </p>
+                                </div>
+                                <span style={{ fontSize: 18, opacity: 0.6, marginTop: 2 }}>↗</span>
+                              </a>
+                            ) : (
+                              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, opacity: 0.75 }}>
+                                <span style={{
+                                  marginTop: 3, flexShrink: 0,
+                                  width: 7, height: 7, borderRadius: '50%',
+                                  background: '#64748b',
+                                }} />
+                                <div>
+                                  <p style={{ fontSize: 13.5, fontWeight: 600, color: 'rgba(255,255,255,.75)', margin: '0 0 3px' }}>
+                                    {doc.name}
+                                  </p>
+                                  <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,.4)', margin: 0 }}>
+                                    {doc.subtitle}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>
