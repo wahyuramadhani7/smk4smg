@@ -241,12 +241,124 @@ export default function Home() {
           transition: transform .35s ease;
         }
         .btn-main:hover::after { transform: scaleX(1); }
+
+        /* ── Responsive Layout ── */
+
+        /* Sambutan grid: 12-col on desktop, single col on mobile */
+        .sambutan-grid {
+          display: grid;
+          grid-template-columns: repeat(12, 1fr);
+          gap: 48px;
+          align-items: center;
+        }
+        .sambutan-grid .sambutan-foto { grid-column: span 5; }
+        .sambutan-grid .sambutan-text { grid-column: span 7; }
+
+        /* Stats grid: 2-col on all, but adjust padding on small */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        /* ── Tablet (≤ 768px) ── */
+        @media (max-width: 768px) {
+          .sambutan-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
+          }
+          .sambutan-grid .sambutan-foto {
+            grid-column: span 1;
+            animation: fadeInLeft .9s .2s ease both;
+          }
+          .sambutan-grid .sambutan-text {
+            grid-column: span 1;
+            animation: fadeInRight .9s .4s ease both;
+          }
+
+          .sambutan-foto-inner {
+            max-width: 420px;
+            margin: 0 auto;
+          }
+
+          .hero-badge-text {
+            font-size: 9px !important;
+            letter-spacing: .2em !important;
+          }
+
+          .hero-btn-inner {
+            padding: 14px 24px !important;
+            font-size: 0.875rem !important;
+          }
+        }
+
+        /* ── Mobile (≤ 480px) ── */
+        @media (max-width: 480px) {
+          .section-padding {
+            padding: 64px 0 !important;
+          }
+
+          .sambutan-grid {
+            gap: 24px;
+          }
+
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+
+          .stat-card-inner {
+            padding: 24px 16px !important;
+          }
+
+          .visi-misi-grid {
+            gap: 16px !important;
+          }
+
+          .visicard,
+          .misicard {
+            padding: 24px 20px !important;
+          }
+
+          .misi-item {
+            padding: 8px 10px !important;
+          }
+
+          .sambutan-quote {
+            padding-left: 16px !important;
+          }
+
+          .sambutan-quote blockquote {
+            font-size: 0.95rem !important;
+          }
+
+          .section-inner {
+            padding: 0 16px !important;
+          }
+
+          .author-avatar {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 13px !important;
+          }
+        }
+
+        /* ── Very small (≤ 360px) ── */
+        @media (max-width: 360px) {
+          .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+          }
+          .stat-card-inner {
+            padding: 20px 12px !important;
+          }
+        }
       `}</style>
 
       <main style={{ minHeight: '100vh', background: '#050810', fontFamily: 'Outfit, sans-serif' }}>
 
         {/* ══ HERO ══ */}
-        <section style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+        <section style={{ position: 'relative', height: '100vh', minHeight: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
 
           {/* Parallax BG */}
           <div style={{
@@ -275,16 +387,16 @@ export default function Home() {
           <Particles />
 
           {/* Content */}
-          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 24px', maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 20px', maxWidth: 900, margin: '0 auto', width: '100%' }}>
             <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block' }} />
-              <span style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#60a5fa' }}>SMK NEGERI 4 SEMARANG</span>
-              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block' }} />
+              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block', flexShrink: 0 }} />
+              <span className="hero-badge-text" style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#60a5fa' }}>SMK NEGERI 4 SEMARANG</span>
+              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block', flexShrink: 0 }} />
             </div>
 
             <h1 className="hero-h1" style={{
               fontFamily: 'Bebas Neue, sans-serif',
-              fontSize: 'clamp(3.5rem, 11vw, 8.5rem)',
+              fontSize: 'clamp(3rem, 11vw, 8.5rem)',
               lineHeight: 1, letterSpacing: '.02em',
               color: '#fff', margin: '0 0 24px',
             }}>
@@ -294,12 +406,12 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="hero-sub" style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'rgba(255,255,255,.65)', lineHeight: 1.75, maxWidth: 560, margin: '0 auto 40px' }}>
+            <p className="hero-sub" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', color: 'rgba(255,255,255,.65)', lineHeight: 1.75, maxWidth: 560, margin: '0 auto 40px' }}>
               {c.hero_subtitle}
             </p>
 
             <div className="hero-btn">
-              <a href="#sambutan" className="btn-main" style={{
+              <a href="#sambutan" className="btn-main hero-btn-inner" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 10,
                 background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
                 color: '#fff', fontWeight: 600, letterSpacing: '.05em',
@@ -322,18 +434,18 @@ export default function Home() {
         </section>
 
         {/* ══ SAMBUTAN ══ */}
-        <section id="sambutan" style={{ padding: '96px 0', background: '#0a0f1e', position: 'relative', overflow: 'hidden' }}>
+        <section id="sambutan" className="section-padding" style={{ padding: '96px 0', background: '#0a0f1e', position: 'relative', overflow: 'hidden' }}>
           {/* Top separator line */}
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, #2563eb, transparent)' }} />
           {/* Glow bg */}
           <div style={{ position: 'absolute', top: 0, right: 0, width: '50%', height: '100%', background: 'radial-gradient(ellipse at 80% 40%, rgba(37,99,235,.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-          <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 48, alignItems: 'center' }}>
+          <div className="section-inner" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px' }}>
+            <div className="sambutan-grid">
 
               {/* Foto */}
-              <div className="sambutan-foto" style={{ gridColumn: 'span 5' }}>
-                <div style={{ position: 'relative' }}>
+              <div className="sambutan-foto">
+                <div className="sambutan-foto-inner" style={{ position: 'relative' }}>
                   {/* Gradient border frame */}
                   <div style={{
                     position: 'absolute', inset: -3, borderRadius: 28,
@@ -364,13 +476,13 @@ export default function Home() {
               </div>
 
               {/* Text */}
-              <div className="sambutan-text" style={{ gridColumn: 'span 7' }}>
+              <div className="sambutan-text">
                 <p style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#38bdf8', marginBottom: 12 }}>
                   Sambutan Kepala Sekolah
                 </p>
                 <h2 style={{
                   fontFamily: 'Outfit, sans-serif',
-                  fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)',
+                  fontSize: 'clamp(1.4rem, 3.5vw, 2.5rem)',
                   fontWeight: 700, lineHeight: 1.2,
                   color: '#fff', marginBottom: 32,
                 }}>
@@ -379,13 +491,13 @@ export default function Home() {
                 </h2>
 
                 {/* Quote */}
-                <div style={{ position: 'relative', paddingLeft: 24, borderLeft: '3px solid #2563eb' }}>
+                <div className="sambutan-quote" style={{ position: 'relative', paddingLeft: 24, borderLeft: '3px solid #2563eb' }}>
                   <div style={{
                     position: 'absolute', top: -20, left: -8,
                     fontFamily: 'Bebas Neue, sans-serif', fontSize: '7rem', lineHeight: .7,
                     color: 'rgba(37,99,235,.15)', userSelect: 'none', pointerEvents: 'none',
                   }}>"</div>
-                  <blockquote style={{ position: 'relative', zIndex: 1, fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: 'rgba(255,255,255,.72)', lineHeight: 1.8, fontStyle: 'italic', margin: 0 }}>
+                  <blockquote style={{ position: 'relative', zIndex: 1, fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)', color: 'rgba(255,255,255,.72)', lineHeight: 1.8, fontStyle: 'italic', margin: 0 }}>
                     {c.sambutan_kutipan}
                   </blockquote>
                 </div>
@@ -393,7 +505,7 @@ export default function Home() {
                 {/* Author */}
                 <div style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 16 }}>
                   <div style={{ position: 'relative', padding: 2, borderRadius: '50%', background: 'conic-gradient(#2563eb, #38bdf8, #2563eb)', animation: 'ringRotate 4s linear infinite', flexShrink: 0 }}>
-                    <div style={{
+                    <div className="author-avatar" style={{
                       width: 48, height: 48, borderRadius: '50%',
                       background: '#0f1629',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -403,7 +515,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div>
-                    <p style={{ fontWeight: 600, color: '#fff', marginBottom: 4 }}>{c.sambutan_nama}</p>
+                    <p style={{ fontWeight: 600, color: '#fff', marginBottom: 4, fontSize: 'clamp(0.85rem, 1.5vw, 1rem)' }}>{c.sambutan_nama}</p>
                     <p style={{ fontSize: 13, color: '#60a5fa' }}>{c.sambutan_jabatan}</p>
                   </div>
                 </div>
@@ -417,7 +529,7 @@ export default function Home() {
         </section>
 
         {/* ══ VISI & MISI ══ */}
-        <section style={{ padding: '96px 0', background: '#0f1629', position: 'relative', overflow: 'hidden' }}>
+        <section className="section-padding" style={{ padding: '96px 0', background: '#0f1629', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, #38bdf8, transparent)' }} />
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -426,17 +538,17 @@ export default function Home() {
           }} />
           <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 400, height: 400, background: 'radial-gradient(circle, rgba(56,189,248,.07) 0%, transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
 
-          <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px' }}>
+          <div className="section-inner" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px' }}>
             {/* Header */}
             <div className="visi-label" style={{ textAlign: 'center', marginBottom: 56 }}>
               <p style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#38bdf8', marginBottom: 12 }}>Arah Sekolah</p>
-              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(2.2rem, 5vw, 4rem)', letterSpacing: '.04em', color: '#fff', margin: '0 0 16px' }}>
+              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '.04em', color: '#fff', margin: '0 0 16px' }}>
                 VISI &amp; MISI
               </h2>
               <div style={{ width: 80, height: 4, borderRadius: 9999, background: 'linear-gradient(90deg, #2563eb, #38bdf8)', margin: '0 auto' }} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+            <div className="visi-misi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
               {/* Visi */}
               <div className="visicard" style={{
                 borderRadius: 20, padding: 32,
@@ -454,7 +566,7 @@ export default function Home() {
                   </div>
                   <span style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(255,255,255,.6)' }}>Visi</span>
                 </div>
-                <p style={{ fontSize: 'clamp(1rem, 1.5vw, 1.1rem)', color: '#fff', lineHeight: 1.8, fontWeight: 500 }}>{c.visi}</p>
+                <p style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)', color: '#fff', lineHeight: 1.8, fontWeight: 500 }}>{c.visi}</p>
               </div>
 
               {/* Misi */}
@@ -485,7 +597,7 @@ export default function Home() {
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.1rem', lineHeight: 1,
                       }}>{i + 1}</span>
-                      <span style={{ fontSize: 14, color: 'rgba(255,255,255,.72)', lineHeight: 1.7 }}>{m}</span>
+                      <span style={{ fontSize: 'clamp(0.8rem, 1.4vw, 0.875rem)', color: 'rgba(255,255,255,.72)', lineHeight: 1.7 }}>{m}</span>
                     </li>
                   ))}
                 </ul>
@@ -495,7 +607,7 @@ export default function Home() {
         </section>
 
         {/* ══ STATISTIK ══ */}
-        <section style={{ padding: '96px 0', background: '#050810', position: 'relative', overflow: 'hidden' }}>
+        <section className="section-padding" style={{ padding: '96px 0', background: '#050810', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, #2563eb, transparent)' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(37,99,235,.1) 0%, transparent 60%)', pointerEvents: 'none' }} />
           {/* Decorative rings */}
@@ -509,17 +621,17 @@ export default function Home() {
             }} />
           ))}
 
-          <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+          <div className="section-inner" style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
             <div className="stats-label" style={{ textAlign: 'center', marginBottom: 56 }}>
               <p style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#38bdf8', marginBottom: 12 }}>Fakta &amp; Angka</p>
-              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(2.2rem, 5vw, 4rem)', letterSpacing: '.04em', color: '#fff', margin: 0 }}>
+              <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '.04em', color: '#fff', margin: 0 }}>
                 SEKOLAH KAMI
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+            <div className="stats-grid">
               {c.stats.map((s: { value: string; label: string }, i: number) => (
-                <div key={i} className={`stat-card stat-${i}`} style={{
+                <div key={i} className={`stat-card stat-card-inner stat-${i}`} style={{
                   borderRadius: 20, padding: '32px 24px', textAlign: 'center',
                   background: 'linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.015))',
                   border: '1px solid rgba(96,165,250,.15)',
@@ -527,7 +639,7 @@ export default function Home() {
                 }}>
                   <div style={{
                     fontFamily: 'Bebas Neue, sans-serif',
-                    fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                    fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                     lineHeight: 1, marginBottom: 8,
                     background: 'linear-gradient(135deg, #60a5fa, #38bdf8)',
                     WebkitBackgroundClip: 'text',
@@ -536,7 +648,7 @@ export default function Home() {
                   }}>
                     <Counter value={s.value} />
                   </div>
-                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,.5)', letterSpacing: '.05em', fontWeight: 500 }}>
+                  <div style={{ fontSize: 'clamp(11px, 1.5vw, 13px)', color: 'rgba(255,255,255,.5)', letterSpacing: '.05em', fontWeight: 500 }}>
                     {s.label}
                   </div>
                 </div>
