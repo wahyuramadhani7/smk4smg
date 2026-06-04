@@ -67,7 +67,7 @@ export default function Navbar() {
         }
 
         .nb--scrolled {
-          box-shadow: 0 4px 30px rgba(10, 35, 90, 0.35);
+          box-shadow: 0 4px 30px rgba(10, 35, 90, 0.4);
         }
 
         .nb__bg {
@@ -98,11 +98,11 @@ export default function Navbar() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: 74px;
+          height: 72px;
           gap: 1.5rem;
         }
 
-        /* ==================== LOGO SECTION ==================== */
+        /* ── LOGO ── */
         .nb__logo {
           display: flex;
           align-items: center;
@@ -114,58 +114,34 @@ export default function Navbar() {
         }
 
         .nb__school-logo {
-          width: 54px;
-          height: 54px;
-          border-radius: 12px;
+          width: 52px;
+          height: 52px;
+          border-radius: 10px;
           object-fit: contain;
           background: white;
           padding: 5px;
           box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-        }
-
-        .nb__logo-badge {
-          width: 46px;
-          height: 46px;
-          background: white;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.22);
           flex-shrink: 0;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .nb__logo:hover .nb__logo-badge {
-          transform: scale(1.07) rotate(-2deg);
-          box-shadow: 0 6px 20px rgba(0,0,0,0.28);
-        }
-
-        .nb__logo-badge span {
-          font-size: 1.5rem;
-          font-weight: 800;
-          color: #1140a0;
-          line-height: 1;
         }
 
         .nb__logo-main {
-          font-size: 1.22rem;
+          font-size: 1.05rem;
           font-weight: 800;
           line-height: 1.2;
-          letter-spacing: -0.03em;
+          letter-spacing: -0.02em;
           color: white;
         }
 
         .nb__logo-sub {
-          font-size: 0.66rem;
+          font-size: 0.68rem;
           color: rgba(255,255,255,0.55);
           font-weight: 500;
-          letter-spacing: 0.12em;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
           margin-top: 2px;
         }
 
-        /* ==================== DESKTOP NAV ==================== */
+        /* ── DESKTOP NAV ── */
         .nb__desktop {
           display: none;
           align-items: center;
@@ -180,9 +156,9 @@ export default function Navbar() {
         }
 
         .nb__link {
-          padding: 0.45rem 0.95rem;
+          padding: 0.5rem 0.9rem;
           border-radius: 8px;
-          font-size: 0.82rem;
+          font-size: 0.875rem;
           font-weight: 600;
           color: rgba(255,255,255,0.82);
           text-decoration: none;
@@ -192,27 +168,12 @@ export default function Navbar() {
           position: relative;
         }
 
-        .nb__link::after {
-          content: '';
-          position: absolute;
-          bottom: 4px;
-          left: 50%;
-          transform: translateX(-50%) scaleX(0);
-          width: 16px;
-          height: 2px;
-          border-radius: 2px;
-          background: rgba(255,255,255,0.6);
-          transition: transform 0.2s ease;
-        }
-
         .nb__link:hover {
           color: white;
-          background: rgba(255,255,255,0.11);
+          background: rgba(255,255,255,0.12);
         }
 
-        .nb__link:hover::after { transform: translateX(-50%) scaleX(1); }
-
-        /* Dropdown */
+        /* ── DROPDOWN ── */
         .nb__dd {
           position: relative;
         }
@@ -220,10 +181,10 @@ export default function Navbar() {
         .nb__dd-btn {
           display: flex;
           align-items: center;
-          gap: 4px;
-          padding: 0.45rem 0.95rem;
+          gap: 5px;
+          padding: 0.5rem 0.9rem;
           border-radius: 8px;
-          font-size: 0.82rem;
+          font-size: 0.875rem;
           font-weight: 600;
           color: rgba(255,255,255,0.82);
           background: none;
@@ -232,12 +193,13 @@ export default function Navbar() {
           transition: color 0.15s, background 0.15s;
           white-space: nowrap;
           outline: none;
+          font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .nb__dd-btn:hover,
         .nb__dd-btn[aria-expanded="true"] {
           color: white;
-          background: rgba(255,255,255,0.13);
+          background: rgba(255,255,255,0.12);
         }
 
         .nb__chevron {
@@ -246,10 +208,11 @@ export default function Navbar() {
           height: 0;
           border-left: 4px solid transparent;
           border-right: 4px solid transparent;
-          border-top: 5px solid currentColor;
+          border-top: 4.5px solid currentColor;
           opacity: 0.65;
           transition: transform 0.22s ease;
           flex-shrink: 0;
+          margin-top: 1px;
         }
 
         .nb__dd-btn[aria-expanded="true"] .nb__chevron {
@@ -257,261 +220,329 @@ export default function Navbar() {
           opacity: 1;
         }
 
-        /* Panel */
+        /* ── DROPDOWN PANEL ── */
         .nb__panel {
           position: absolute;
-          top: calc(100% + 12px);
-          left: 0;
-          background: white;
-          border-radius: 14px;
-          box-shadow: 0 24px 64px rgba(10,35,90,0.2), 0 4px 16px rgba(0,0,0,0.07);
-          padding: 7px;
-          min-width: 210px;
-          z-index: 200;
-          border: 1px solid rgba(10,35,90,0.07);
-          animation: panelIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+          top: calc(100% + 10px);
+          left: 50%;
+          transform: translateX(-50%);
+          min-width: 200px;
+          background: #0d2260;
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 12px;
+          padding: 6px;
+          box-shadow: 0 16px 40px rgba(5,15,50,0.55), 0 4px 12px rgba(0,0,0,0.3);
+          animation: panelFade 0.17s ease both;
+          z-index: 100;
         }
 
-        @keyframes panelIn {
-          from { opacity: 0; transform: scale(0.94) translateY(-8px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+        .nb__panel--jurusan {
+          min-width: 260px;
+          padding: 12px;
         }
 
-        .nb__panel::before {
-          content: '';
-          position: absolute;
-          top: -6px;
-          left: 20px;
-          width: 12px;
-          height: 12px;
-          background: white;
-          border-left: 1px solid rgba(10,35,90,0.07);
-          border-top: 1px solid rgba(10,35,90,0.07);
-          transform: rotate(45deg);
-          border-radius: 2px 0 0 0;
+        @keyframes panelFade {
+          from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
         .nb__panel-item {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 13px;
-          border-radius: 9px;
-          font-size: 0.8rem;
-          font-weight: 600;
-          color: #1e3a6e;
+          padding: 9px 14px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: rgba(255,255,255,0.78);
           text-decoration: none;
-          transition: background 0.15s, color 0.15s, transform 0.15s;
-          outline: none;
+          transition: background 0.15s, color 0.15s;
+          white-space: nowrap;
         }
 
         .nb__panel-item:hover {
-          background: #eef4ff;
-          color: #1140a0;
-          transform: translateX(2px);
+          background: rgba(255,255,255,0.1);
+          color: white;
         }
 
         .nb__dot {
-          width: 6px;
-          height: 6px;
+          width: 5px;
+          height: 5px;
           border-radius: 50%;
-          background: #1140a0;
-          opacity: 0.25;
+          background: rgba(255,255,255,0.35);
           flex-shrink: 0;
+          transition: background 0.15s;
         }
 
         .nb__panel-item:hover .nb__dot {
-          opacity: 1;
-          transform: scale(1.3);
+          background: #60a5fa;
         }
-
-        .nb__panel--jurusan { min-width: 270px; }
 
         .nb__jurusan-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4px;
-          padding: 2px;
+          grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+          gap: 6px;
         }
 
         .nb__jurusan-chip {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 10px 8px;
-          border-radius: 9px;
+          padding: 8px 10px;
+          border-radius: 8px;
+          background: rgba(255,255,255,0.07);
+          border: 1px solid rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.8);
           font-size: 0.78rem;
           font-weight: 700;
-          color: #1e3a6e;
           text-decoration: none;
-          background: #f4f7ff;
-          transition: all 0.18s;
-          outline: none;
+          letter-spacing: 0.03em;
+          transition: background 0.15s, color 0.15s, border-color 0.15s;
         }
 
         .nb__jurusan-chip:hover {
-          background: #1140a0;
+          background: rgba(37,99,235,0.5);
+          border-color: rgba(96,165,250,0.4);
           color: white;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(17,64,160,0.28);
         }
 
-        /* Login Button */
+        /* ── LOGIN BUTTON ── */
         .nb__login {
           margin-left: 8px;
-          padding: 0.45rem 1.2rem;
-          background: white;
-          color: #1140a0;
-          border-radius: 9px;
-          font-size: 0.82rem;
-          font-weight: 700;
+          padding: 0.5rem 1.1rem;
+          border-radius: 8px;
+          background: rgba(255,255,255,0.14);
+          border: 1px solid rgba(255,255,255,0.2);
+          color: white;
+          font-size: 0.875rem;
+          font-weight: 600;
           text-decoration: none;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.14);
-          transition: all 0.18s;
+          transition: background 0.2s, border-color 0.2s, transform 0.15s;
+          white-space: nowrap;
+          font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .nb__login:hover {
-          background: #eef4ff;
+          background: rgba(255,255,255,0.24);
+          border-color: rgba(255,255,255,0.35);
           transform: translateY(-1px);
-          box-shadow: 0 5px 18px rgba(17,64,160,0.22);
         }
 
-        /* Hamburger */
+        /* ── HAMBURGER ── */
         .nb__ham {
-          width: 42px;
-          height: 42px;
-          border-radius: 9px;
+          width: 44px;
+          height: 44px;
+          border-radius: 10px;
           background: rgba(255,255,255,0.1);
-          border: 1px solid rgba(255,255,255,0.12);
+          border: 1px solid rgba(255,255,255,0.15);
           cursor: pointer;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           gap: 5px;
-          transition: background 0.18s;
+          transition: background 0.2s ease, border-color 0.2s ease;
           outline: none;
+          flex-shrink: 0;
         }
 
-        .nb__ham:hover { background: rgba(255,255,255,0.18); }
+        .nb__ham:hover {
+          background: rgba(255,255,255,0.18);
+          border-color: rgba(255,255,255,0.25);
+        }
 
         .nb__ham-line {
-          width: 19px;
+          width: 22px;
           height: 2px;
           background: white;
           border-radius: 2px;
-          transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease;
+          transition: all 0.28s cubic-bezier(0.16,1,0.3,1);
+          transform-origin: center;
         }
 
-        /* Mobile Styles */
+        /* ── MOBILE OVERLAY ── */
         .nb__overlay {
           position: fixed;
           inset: 0;
-          top: 74px;
-          background: rgba(5, 18, 55, 0.55);
-          backdrop-filter: blur(3px);
+          top: 72px;
+          background: rgba(5, 18, 55, 0.6);
+          backdrop-filter: blur(4px);
           z-index: 999;
           animation: fadeIn 0.2s ease;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        /* ── MOBILE MENU ── */
         .nb__mobile {
           position: fixed;
-          top: 74px;
+          top: 72px;
           left: 0;
           right: 0;
           z-index: 1000;
           background: #0d2260;
-          border-top: 1px solid rgba(255,255,255,0.07);
-          padding: 12px 16px 24px;
-          max-height: calc(100dvh - 74px);
+          border-top: 1px solid rgba(255,255,255,0.08);
+          padding: 8px 12px 20px;
+          max-height: calc(100dvh - 72px);
           overflow-y: auto;
           animation: slideDown 0.28s cubic-bezier(0.16,1,0.3,1) both;
         }
 
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-12px); }
-          to { opacity: 1; transform: translateY(0); }
+        .nb__m-link {
+          display: flex;
+          align-items: center;
+          padding: 12px 14px;
+          border-radius: 10px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: rgba(255,255,255,0.82);
+          text-decoration: none;
+          transition: background 0.15s, color 0.15s;
         }
 
-        .nb__m-link, .nb__m-acc-btn {
+        .nb__m-link:hover {
+          background: rgba(255,255,255,0.08);
+          color: white;
+        }
+
+        .nb__m-acc-btn {
+          width: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 11px 13px;
+          padding: 12px 14px;
           border-radius: 10px;
-          font-size: 0.85rem;
+          font-size: 0.9rem;
           font-weight: 600;
-          color: rgba(255,255,255,0.8);
-          text-decoration: none;
-          transition: all 0.15s;
+          color: rgba(255,255,255,0.82);
+          background: none;
+          border: none;
+          cursor: pointer;
+          text-align: left;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          transition: background 0.15s, color 0.15s;
         }
 
-        .nb__m-link:hover, .nb__m-acc-btn:hover {
-          color: white;
+        .nb__m-acc-btn:hover,
+        .nb__m-acc-btn[aria-expanded="true"] {
           background: rgba(255,255,255,0.08);
+          color: white;
+        }
+
+        .nb__m-acc-btn[aria-expanded="true"] .nb__chevron {
+          transform: rotate(180deg);
+          opacity: 1;
+        }
+
+        .nb__m-sub {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          margin: 2px 0 4px 14px;
+          padding-left: 14px;
+          border-left: 2px solid rgba(96,165,250,0.3);
+        }
+
+        .nb__m-sub-link {
+          padding: 9px 12px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: rgba(255,255,255,0.7);
+          text-decoration: none;
+          transition: background 0.15s, color 0.15s;
+        }
+
+        .nb__m-sub-link:hover {
+          background: rgba(255,255,255,0.07);
+          color: white;
         }
 
         .nb__m-jurusan-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 6px;
-          padding: 8px 13px 4px;
+          margin: 6px 14px 10px;
+          padding: 12px;
+          background: rgba(255,255,255,0.04);
+          border-radius: 10px;
         }
 
         .nb__m-chip {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 9px 4px;
+          padding: 8px 6px;
           border-radius: 8px;
-          font-size: 0.7rem;
-          font-weight: 700;
-          color: rgba(255,255,255,0.65);
           background: rgba(255,255,255,0.07);
+          border: 1px solid rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.8);
+          font-size: 0.75rem;
+          font-weight: 700;
           text-decoration: none;
-          transition: all 0.15s;
+          transition: background 0.15s, color 0.15s;
+          letter-spacing: 0.02em;
         }
 
         .nb__m-chip:hover {
-          background: rgba(255,255,255,0.16);
+          background: rgba(37,99,235,0.45);
           color: white;
-          transform: scale(1.04);
         }
 
         .nb__divider {
           height: 1px;
           background: rgba(255,255,255,0.07);
-          margin: 7px 0;
+          margin: 6px 14px;
         }
 
         .nb__m-login {
           display: block;
-          margin-top: 12px;
-          padding: 12px 16px;
-          background: white;
-          color: #1140a0;
-          border-radius: 11px;
-          font-size: 0.87rem;
-          font-weight: 700;
-          text-align: center;
+          margin: 10px 14px 0;
+          padding: 13px 16px;
+          border-radius: 10px;
+          background: rgba(255,255,255,0.12);
+          border: 1px solid rgba(255,255,255,0.18);
+          color: white;
+          font-size: 0.9rem;
+          font-weight: 600;
           text-decoration: none;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+          text-align: center;
+          transition: background 0.2s;
+        }
+
+        .nb__m-login:hover {
+          background: rgba(255,255,255,0.2);
+        }
+
+        @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── RESPONSIVE LOGO TEXT ── */
+        @media (max-width: 400px) {
+          .nb__logo-main { font-size: 0.9rem; }
+          .nb__logo-sub  { display: none; }
+          .nb__school-logo { width: 44px; height: 44px; }
+          .nb__inner { padding: 0 1rem; }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .nb__link, .nb__dd-btn { padding: 0.45rem 0.7rem; font-size: 0.82rem; }
+          .nb__login { padding: 0.45rem 0.9rem; font-size: 0.82rem; }
+          .nb__inner { padding: 0 1.25rem; }
         }
       `}</style>
 
-      {/* NAVBAR */}
       <nav className={`nb${scrolled ? ' nb--scrolled' : ''}`} aria-label="Navigasi utama">
         <div className="nb__bg" aria-hidden="true" />
         <div className="nb__inner">
           <div className="nb__bar">
 
-            {/* Logo Section */}
+            {/* Logo */}
             <Link href="/home" className="nb__logo" aria-label="SMK Negeri 4 Semarang – Beranda">
-              <img 
-                src="./images/logosmk4.png" 
-                alt="Logo SMK Negeri 4 Semarang" 
+              <img
+                src="./images/logosmk4.png"
+                alt="Logo SMK Negeri 4 Semarang"
                 className="nb__school-logo"
               />
               <div>
@@ -524,9 +555,11 @@ export default function Navbar() {
             <div className="nb__desktop" role="menubar">
               <Link href="/home" className="nb__link" role="menuitem">Home</Link>
 
-              <div className="nb__dd"
+              <div
+                className="nb__dd"
                 onMouseEnter={() => handleDropdownEnter('kurikulum')}
-                onMouseLeave={handleDropdownLeave}>
+                onMouseLeave={handleDropdownLeave}
+              >
                 <button
                   className="nb__dd-btn"
                   aria-haspopup="true"
@@ -548,9 +581,11 @@ export default function Navbar() {
                 )}
               </div>
 
-              <div className="nb__dd"
+              <div
+                className="nb__dd"
                 onMouseEnter={() => handleDropdownEnter('jurusan')}
-                onMouseLeave={handleDropdownLeave}>
+                onMouseLeave={handleDropdownLeave}
+              >
                 <button
                   className="nb__dd-btn"
                   aria-haspopup="true"
