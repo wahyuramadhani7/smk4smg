@@ -827,38 +827,7 @@ export default function Navbar() {
           </div>
         )}
       </nav>
-      {/* ── FOOTER ── */}
-      <footer style={{
-        background: 'linear-gradient(110deg, #0a1f5c 0%, #1140a0 55%, #1a55c8 100%)',
-        borderTop: '1px solid rgba(255,255,255,0.1)',
-        padding: '1.25rem 2rem',
-        textAlign: 'center',
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-      }}>
-        <p style={{
-          margin: 0,
-          fontSize: '0.82rem',
-          color: 'rgba(255,255,255,0.55)',
-          letterSpacing: '0.03em',
-        }}>
-          Handmade with{' '}
-          <span style={{ color: '#f87171', fontSize: '0.9rem' }}>♥</span>
-          {' '}by{' '}
-          {['Lathifa', 'Key', 'Lala', 'Ikhfina'].map((name, i, arr) => (
-            <span key={name}>
-              <span style={{
-                color: 'rgba(255,255,255,0.85)',
-                fontWeight: 700,
-              }}>
-                {name}
-              </span>
-              {i < arr.length - 1 && (
-                <span style={{ color: 'rgba(255,255,255,0.35)', margin: '0 4px' }}>·</span>
-              )}
-            </span>
-          ))}
-        </p>
-      </footer>
+      
     </>
     
   );
