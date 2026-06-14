@@ -43,7 +43,7 @@ export default function LayoutClient({
             Handmade with{' '}
             <span style={{ color: '#f87171', fontSize: '0.9rem' }}>♥</span>
             {' '}by{' '}
-            {['Lathifa', 'Key', 'Lala', 'Ikhfina'].map((name, i, arr) => (
+            {['Lathifa', 'Keysya', 'Nabilla', 'Ikfina'].map((name, i, arr) => (
               <span key={name}>
                 <span style={{ color: 'rgba(255,255,255,0.85)', fontWeight: 700 }}>
                   {name}
