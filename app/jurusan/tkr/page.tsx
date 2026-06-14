@@ -18,22 +18,22 @@ interface Jurusan {
 }
 
 const DEFAULT: Jurusan = {
-  nama_lengkap: 'Desain Pemodelan & Informasi Bangunan',
-  subtitle: 'Program Keahlian DPIB · SMK Negeri 4 Semarang',
+  nama_lengkap: 'Teknik Kendaraan Ringan',
+  subtitle: 'Program Keahlian TKR · SMK Negeri 4 Semarang',
   profil_description:
-    'Program keahlian DPIB mempersiapkan siswa untuk menguasai teknologi desain dan pemodelan bangunan berbasis digital. Lulusan mampu merancang, memodelkan, dan mendokumentasikan proyek konstruksi menggunakan perangkat lunak BIM (Building Information Modeling) terkini sesuai standar industri.',
+    'Program keahlian Teknik Kendaraan Ringan mempersiapkan siswa untuk menguasai teknologi otomotif kendaraan ringan secara profesional. Lulusan mampu melakukan perawatan, perbaikan, dan diagnosa sistem kendaraan ringan sesuai standar industri otomotif nasional maupun internasional.',
   kompetensi: [
-    'Membuat gambar teknik bangunan 2D & 3D dengan AutoCAD',
-    'Memodelkan bangunan menggunakan Revit / BIM software',
-    'Menyusun dokumen perencanaan dan RAB konstruksi',
-    'Merancang interior dan eksterior bangunan secara digital',
-    'Berkolaborasi dalam proyek konstruksi berbasis teknologi',
+    'Melakukan perawatan dan perbaikan mesin kendaraan ringan',
+    'Mendiagnosa kerusakan sistem kelistrikan kendaraan',
+    'Memperbaiki sistem pemindah tenaga dan chasis kendaraan',
+    'Menggunakan alat diagnosis elektronik (scanner) kendaraan modern',
+    'Menerapkan K3 (Keselamatan & Kesehatan Kerja) di bengkel otomotif',
   ],
-  icon: '🏗️',
-  color: '#059669',
+  icon: '🚗',
+  color: '#1d4ed8',
 };
 
-export default function JurusanDPIB() {
+export default function JurusanTKR() {
   const [jurusan, setJurusan] = useState<Jurusan>(DEFAULT);
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,7 @@ export default function JurusanDPIB() {
       const { data } = await supabase
         .from('jurusan_content')
         .select('*')
-        .eq('kode', 'DPIB')
+        .eq('kode', 'TKR')
         .single();
 
       if (data) {
@@ -61,8 +61,8 @@ export default function JurusanDPIB() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050810' }}>
-        <div style={{ width: 40, height: 40, border: '3px solid rgba(52,211,153,.15)', borderTopColor: '#34d399', borderRadius: '50%', animation: 'spin .8s linear infinite' }} />
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb' }}>
+        <div style={{ width: 40, height: 40, border: '3px solid #e5e7eb', borderTopColor: '#1d4ed8', borderRadius: '50%', animation: 'spin .8s linear infinite' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
@@ -71,70 +71,78 @@ export default function JurusanDPIB() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
         @keyframes spin     { to { transform: rotate(360deg); } }
         @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
         @keyframes fadeUp   { from { opacity:0; transform:translateY(28px);  } to { opacity:1; transform:translateY(0); } }
         @keyframes scaleIn  { from { opacity:0; transform:scale(.93);        } to { opacity:1; transform:scale(1);     } }
 
-        .dpib-title  { animation: fadeDown .8s .1s  ease both; }
-        .dpib-icon   { animation: scaleIn  .7s .15s ease both; }
-        .dpib-sub    { animation: fadeUp   .8s .3s  ease both; }
-        .dpib-bar    { animation: fadeUp   .8s .35s ease both; }
-        .dpib-footer { animation: fadeUp   .8s .6s  ease both; }
+        .tkr-title  { animation: fadeDown .8s .1s  ease both; }
+        .tkr-icon   { animation: scaleIn  .7s .15s ease both; }
+        .tkr-sub    { animation: fadeUp   .8s .3s  ease both; }
+        .tkr-bar    { animation: fadeUp   .8s .35s ease both; }
+        .tkr-footer { animation: fadeUp   .8s .6s  ease both; }
 
-        .dpib-card {
-          transition: transform .3s ease, box-shadow .3s ease;
+        .tkr-card {
+          transition: transform .25s ease, box-shadow .25s ease;
           cursor: default;
         }
-        .dpib-card:hover { transform: translateY(-8px); }
-
-        .dpib-kompetensi-item {
-          display: flex; align-items: flex-start; gap: 12px;
-          font-size: 14px; color: rgba(255,255,255,.65);
-          line-height: 1.7; padding: 10px 0;
-          border-bottom: 1px solid rgba(255,255,255,.05);
+        .tkr-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 16px 48px rgba(0,0,0,.1);
         }
-        .dpib-kompetensi-item:last-child { border-bottom: none; }
+
+        .tkr-kompetensi-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          font-size: 14px;
+          color: #374151;
+          line-height: 1.7;
+          padding: 10px 0;
+          border-bottom: 1px solid #f3f4f6;
+        }
+        .tkr-kompetensi-item:last-child { border-bottom: none; }
+        .tkr-kompetensi-item:hover { color: #111827; }
       `}</style>
 
-      <main style={{ minHeight: '100vh', background: '#050810', fontFamily: 'Outfit, sans-serif', paddingBottom: 80 }}>
+      <main style={{ minHeight: '100vh', background: '#ffffff', fontFamily: "'Plus Jakarta Sans', sans-serif", paddingBottom: 80 }}>
 
         {/* ── Hero ── */}
-        <section style={{ position: 'relative', padding: '80px 24px 72px', textAlign: 'center', overflow: 'hidden' }}>
-          {/* bg glow */}
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(5,150,105,.18) 0%, transparent 65%)', pointerEvents: 'none' }} />
-          {/* grid */}
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(5,150,105,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(5,150,105,.05) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
-          {/* bottom line */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,#34d399,transparent)' }} />
+        <section style={{ position: 'relative', padding: '80px 24px 72px', textAlign: 'center', overflow: 'hidden', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+
+          {/* top accent line */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #1d4ed8, #f59e0b)' }} />
 
           <div style={{ position: 'relative', zIndex: 1 }}>
+
             {/* eyebrow */}
-            <div className="dpib-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-              <span style={{ width: 24, height: 1, background: '#34d399', display: 'inline-block' }} />
-              <span style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#6ee7b7' }}>Program Keahlian</span>
-              <span style={{ width: 24, height: 1, background: '#34d399', display: 'inline-block' }} />
+            <div className="tkr-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <span style={{ width: 24, height: 1, background: '#f59e0b', display: 'inline-block' }} />
+              <span style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 700, color: '#f59e0b' }}>
+                Program Keahlian
+              </span>
+              <span style={{ width: 24, height: 1, background: '#f59e0b', display: 'inline-block' }} />
             </div>
 
             {/* icon */}
-            <div className="dpib-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', width: 80, height: 80, borderRadius: 24, background: 'rgba(5,150,105,.15)', fontSize: '2.4rem' }}>
+            <div className="tkr-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', width: 80, height: 80, borderRadius: 24, background: '#eff6ff', border: '1.5px solid #bfdbfe', fontSize: '2.4rem' }}>
               {jurusan.icon}
             </div>
 
             {/* title */}
-            <h1 className="dpib-title" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(2.4rem,6vw,4.8rem)', letterSpacing: '.04em', lineHeight: 1, color: '#fff', margin: '0 0 20px' }}>
+            <h1 className="tkr-title" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(1.8rem,5vw,3.2rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.01em', color: '#111827', margin: '0 0 16px' }}>
               {jurusan.nama_lengkap}
             </h1>
 
             {/* subtitle */}
-            <p className="dpib-sub" style={{ fontSize: 'clamp(.95rem,1.8vw,1.1rem)', color: 'rgba(255,255,255,.6)', lineHeight: 1.8, maxWidth: 520, margin: '0 auto 24px', whiteSpace: 'pre-line' }}>
+            <p className="tkr-sub" style={{ fontSize: 'clamp(.95rem,1.8vw,1.05rem)', color: '#6b7280', lineHeight: 1.8, maxWidth: 520, margin: '0 auto 24px', whiteSpace: 'pre-line', fontWeight: 500 }}>
               {jurusan.subtitle}
             </p>
 
             {/* accent bar */}
-            <div className="dpib-bar" style={{ width: 80, height: 4, borderRadius: 9999, background: 'linear-gradient(90deg,#059669,#34d399)', margin: '0 auto' }} />
+            <div className="tkr-bar" style={{ width: 60, height: 4, borderRadius: 9999, background: 'linear-gradient(90deg, #1d4ed8, #f59e0b)', margin: '0 auto' }} />
           </div>
         </section>
 
@@ -143,41 +151,43 @@ export default function JurusanDPIB() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 32 }}>
 
             {/* Card 1 — Profil */}
-            <div className="dpib-card" style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(5,150,105,.35)', display: 'flex', flexDirection: 'column', animation: 'scaleIn .7s .25s ease both' }}>
-              <div style={{ height: 4, background: 'linear-gradient(90deg,#059669,#34d399)', flexShrink: 0 }} />
-              <div style={{ padding: 32, background: 'rgba(255,255,255,.03)', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: 60, height: 60, borderRadius: 18, flexShrink: 0, background: 'rgba(5,150,105,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.7rem', marginBottom: 20 }}>
-                  📐
+            <div className="tkr-card" style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', background: '#ffffff', boxShadow: '0 4px 20px rgba(0,0,0,.05)', animation: 'scaleIn .7s .25s ease both' }}>
+              <div style={{ height: 4, background: 'linear-gradient(90deg, #1d4ed8, #60a5fa)', flexShrink: 0 }} />
+              <div style={{ padding: 32, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: 56, height: 56, borderRadius: 14, flexShrink: 0, background: '#eff6ff', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', marginBottom: 20 }}>
+                  🔩
                 </div>
-                <p style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 600, color: '#6ee7b7', marginBottom: 8 }}>
+                <p style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 700, color: '#f59e0b', marginBottom: 8 }}>
                   Tentang Jurusan
                 </p>
-                <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.6rem', letterSpacing: '.05em', color: '#fff', margin: '0 0 14px' }}>
+                <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '1.3rem', fontWeight: 800, color: '#111827', margin: '0 0 14px' }}>
                   Profil Jurusan
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,.65)', lineHeight: 1.8, flex: 1, margin: 0 }}>
+                <p style={{ fontSize: 14, color: '#4b5563', lineHeight: 1.85, flex: 1, margin: 0 }}>
                   {jurusan.profil_description}
                 </p>
               </div>
             </div>
 
             {/* Card 2 — Kompetensi */}
-            <div className="dpib-card" style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(37,99,235,.35)', display: 'flex', flexDirection: 'column', animation: 'scaleIn .7s .4s ease both' }}>
-              <div style={{ height: 4, background: 'linear-gradient(90deg,#2563eb,#38bdf8)', flexShrink: 0 }} />
-              <div style={{ padding: 32, background: 'rgba(255,255,255,.03)', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: 60, height: 60, borderRadius: 18, flexShrink: 0, background: 'rgba(37,99,235,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.7rem', marginBottom: 20 }}>
+            <div className="tkr-card" style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', background: '#ffffff', boxShadow: '0 4px 20px rgba(0,0,0,.05)', animation: 'scaleIn .7s .4s ease both' }}>
+              <div style={{ height: 4, background: 'linear-gradient(90deg, #f59e0b, #fcd34d)', flexShrink: 0 }} />
+              <div style={{ padding: 32, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: 56, height: 56, borderRadius: 14, flexShrink: 0, background: '#fffbeb', border: '1px solid #fde68a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.6rem', marginBottom: 20 }}>
                   🎓
                 </div>
-                <p style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 600, color: '#60a5fa', marginBottom: 8 }}>
+                <p style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 700, color: '#1d4ed8', marginBottom: 8 }}>
                   Kemampuan Lulusan
                 </p>
-                <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.6rem', letterSpacing: '.05em', color: '#fff', margin: '0 0 14px' }}>
+                <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '1.3rem', fontWeight: 800, color: '#111827', margin: '0 0 14px' }}>
                   Kompetensi
                 </h2>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, flex: 1 }}>
                   {jurusan.kompetensi.map((item, i) => (
-                    <li key={i} className="dpib-kompetensi-item">
-                      <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg,#2563eb,#38bdf8)', flexShrink: 0, marginTop: 7, display: 'inline-block' }} />
+                    <li key={i} className="tkr-kompetensi-item">
+                      <span style={{ width: 22, height: 22, borderRadius: 6, background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.75rem', flexShrink: 0, marginTop: 1 }}>
+                        {i + 1}
+                      </span>
                       {item}
                     </li>
                   ))}
@@ -188,12 +198,12 @@ export default function JurusanDPIB() {
           </div>
 
           {/* Footer note */}
-          <div className="dpib-footer" style={{ textAlign: 'center', padding: '24px 32px', borderRadius: 16, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="tkr-footer" style={{ textAlign: 'center', padding: '20px 32px', borderRadius: 12, background: '#f9fafb', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', whiteSpace: 'pre-line', margin: 0 }}>
-              {'Butuh informasi lebih lanjut tentang jurusan DPIB?\nSilakan hubungi Waka Kurikulum SMK Negeri 4 Semarang'}
+            <p style={{ fontSize: 13, color: '#6b7280', whiteSpace: 'pre-line', margin: 0, fontWeight: 500 }}>
+              {'Butuh informasi lebih lanjut tentang jurusan Teknik Kendaraan Ringan?\nSilakan hubungi Waka Kurikulum SMK Negeri 4 Semarang'}
             </p>
           </div>
         </div>
