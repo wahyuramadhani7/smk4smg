@@ -23,11 +23,12 @@ interface Jurusan {
 const JURUSAN_LIST = [
   { kode: 'DPIB', nama: 'Desain Pemodelan dan Informasi Bangunan' },
   { kode: 'DKV', nama: 'Desain Komunikasi Visual' },
-  { kode: 'ANS', nama: 'Akuntansi dan Keuangan Lembaga' },
+  { kode: 'Animasi', nama: 'Animasi' },
   { kode: 'TEI', nama: 'Teknik Elektronika Industri' },
   { kode: 'TITL', nama: 'Teknik Instalasi Tenaga Listrik' },
-  { kode: 'TKR', nama: 'Teknik Kendaraan Roda' },
+  { kode: 'TKR', nama: 'Teknik Kendaraan Ringan' },
   { kode: 'TPM', nama: 'Teknik Pemesinan' },
+  { kode: 'TSM', nama: 'Teknik Sepeda Motor' },
 ];
 
 const DEFAULT_JURUSAN: Omit<Jurusan, 'id' | 'kode' | 'nama_lengkap' | 'nama_singkat'> = {
@@ -59,7 +60,7 @@ export default function AdminJurusan() {
 
     // Pastikan semua jurusan ada di database
     const existingKode = new Set(data?.map(j => j.kode) || []);
-    const toInsert = JURUSAN_LIST.filter(j => !existingKode.has(j.kode)).map((j, index) => ({
+    const toInsert = JURUSAN_LIST.filter(j => !existingKode.has(j.kode)).map((j) => ({
       ...DEFAULT_JURUSAN,
       kode: j.kode,
       nama_lengkap: j.nama,
@@ -78,8 +79,8 @@ export default function AdminJurusan() {
     }
 
     setJurusanList(data || []);
-    
-    // Set default selected ke DPIB atau yang pertama
+
+    // Set default selected ke yang pertama
     if (data && data.length > 0) {
       setSelected(data[0]);
     }
@@ -100,7 +101,7 @@ export default function AdminJurusan() {
     } else {
       setMessage('✅ Tersimpan');
       setTimeout(() => setMessage(''), 2500);
-      fetchJurusan(); // refresh data
+      fetchJurusan();
     }
     setSaving(false);
   };
@@ -145,8 +146,8 @@ export default function AdminJurusan() {
                       if (jurusanData) setSelected(jurusanData);
                     }}
                     className={`w-full text-left px-4 py-3 rounded-xl mb-1 transition-all ${
-                      selected.kode === j.kode 
-                        ? 'bg-blue-600 text-white' 
+                      selected.kode === j.kode
+                        ? 'bg-blue-600 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
@@ -214,8 +215,8 @@ export default function AdminJurusan() {
                     <div>
                       <div className="flex justify-between mb-3">
                         <label className="font-medium">Kompetensi Lulusan</label>
-                        <button 
-                          onClick={() => update('kompetensi', [...(selected.kompetensi || []), ''])} 
+                        <button
+                          onClick={() => update('kompetensi', [...(selected.kompetensi || []), ''])}
                           className="text-blue-600 text-sm hover:underline"
                         >
                           + Tambah
@@ -233,11 +234,11 @@ export default function AdminJurusan() {
                             }}
                             className="flex-1 border rounded-lg px-4 py-3"
                           />
-                          <button 
+                          <button
                             onClick={() => {
                               const newList = selected.kompetensi.filter((_, idx) => idx !== i);
                               update('kompetensi', newList);
-                            }} 
+                            }}
                             className="text-red-500 px-4 hover:bg-red-50 rounded-lg"
                           >
                             ✕
