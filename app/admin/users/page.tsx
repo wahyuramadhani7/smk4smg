@@ -9,6 +9,7 @@ interface Profile {
   role: string;
   is_active: boolean;
   created_at: string;
+  email: string;
 }
 
 export default function KelolaUser() {
@@ -31,21 +32,28 @@ export default function KelolaUser() {
     setErrorMessage('');
 
     try {
-      const { data, error } = await supabase
+      const { data: profiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, full_name, role, is_active, created_at')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Full Error:', error);
-        setErrorMessage(`Gagal mengambil data: ${error.message}`);
+      if (profileError) {
+        console.error('Profile Error:', profileError);
+        setErrorMessage(`Gagal mengambil data: ${profileError.message}`);
         setUsers([]);
-      } else {
-        setUsers(data || []);
+        return;
       }
+
+      // Email ditampilkan sebagai "-" untuk sementara (client tidak bisa akses auth.users)
+      const mergedUsers = profiles?.map(profile => ({
+        ...profile,
+        email: '—'
+      })) || [];
+
+      setUsers(mergedUsers);
     } catch (err: any) {
       console.error('Unexpected error:', err);
-      setErrorMessage('Terjadi kesalahan tidak terduga');
+      setErrorMessage('Terjadi kesalahan tidak terduga saat mengambil data');
       setUsers([]);
     } finally {
       setLoading(false);
@@ -58,15 +66,27 @@ export default function KelolaUser() {
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validasi sederhana
+    if (!form.email || !form.full_name || !form.password) {
+      alert('❌ Mohon isi semua field');
+      return;
+    }
+
     const result = await createUser(form);
     
     if (result.success) {
-      alert('✅ User berhasil dibuat');
+      alert('✅ User berhasil dibuat!');
       setShowAddModal(false);
-      setForm({ email: '', full_name: '', password: '', role: 'student' });
-      fetchUsers();
+      setForm({ 
+        email: '', 
+        full_name: '', 
+        password: '', 
+        role: 'student' 
+      });
+      fetchUsers(); // Refresh tabel
     } else {
-      alert('❌ Error: ' + (result.error || 'Terjadi kesalahan'));
+      alert('❌ Gagal: ' + (result.error || 'Terjadi kesalahan'));
     }
   };
 
@@ -123,7 +143,7 @@ export default function KelolaUser() {
               users.map((user) => (
                 <tr key={user.id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium">{user.full_name}</td>
-                  <td className="px-6 py-4 text-gray-600">—</td>
+                  <td className="px-6 py-4 text-gray-600">{user.email}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${
                       user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
@@ -153,7 +173,7 @@ export default function KelolaUser() {
                     </button>
                     <button
                       onClick={async () => {
-                        if (confirm(`Hapus ${user.full_name}?`)) {
+                        if (confirm(`Hapus ${user.full_name}? Ini tidak bisa dikembalikan!`)) {
                           await deleteUser(user.id);
                           fetchUsers();
                         }
@@ -204,6 +224,7 @@ export default function KelolaUser() {
                 <input
                   type="password"
                   required
+                  minLength={6}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-indigo-500"
