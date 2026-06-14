@@ -31,7 +31,9 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const toggleSub = (menu: string) =>
@@ -46,7 +48,10 @@ export default function Navbar() {
     dropdownTimerRef.current = setTimeout(() => setActiveDropdown(null), 120);
   };
 
-  const closeAll = () => { setIsOpen(false); setOpenSub(null); };
+  const closeAll = () => {
+    setIsOpen(false);
+    setOpenSub(null);
+  };
 
   return (
     <>
@@ -429,13 +434,23 @@ export default function Navbar() {
         }
       `}</style>
 
-      <nav className={`nb${scrolled ? " nb--scrolled" : ""}`} aria-label="Navigasi utama">
+      <nav
+        className={`nb${scrolled ? " nb--scrolled" : ""}`}
+        aria-label="Navigasi utama"
+      >
         <div className="nb__inner">
           <div className="nb__bar">
-
             {/* Logo */}
-            <Link href="/home" className="nb__logo" aria-label="SMK Negeri 4 Semarang – Beranda">
-              <img src="./images/logosmk4.png" alt="Logo SMK Negeri 4 Semarang" className="nb__school-logo" />
+            <Link
+              href="/home"
+              className="nb__logo"
+              aria-label="SMK Negeri 4 Semarang – Beranda"
+            >
+              <img
+                src="/images/logosmk4.png"
+                alt="Logo SMK Negeri 4 Semarang"
+                className="nb__school-logo"
+              />
               <div className="nb__logo-text">
                 <span className="nb__logo-main">SMK NEGERI 4 SEMARANG</span>
                 <span className="nb__logo-sub">Semarang · Jawa Tengah</span>
@@ -444,89 +459,196 @@ export default function Navbar() {
 
             {/* Desktop Menu */}
             <div className="nb__desktop" role="menubar">
-              <Link href="/home" className="nb__link nb__link--active" role="menuitem">Home</Link>
+              <Link
+                href="/home"
+                className="nb__link nb__link--active"
+                role="menuitem"
+              >
+                Home
+              </Link>
 
-              <div className="nb__dd" onMouseEnter={() => handleDropdownEnter("kurikulum")} onMouseLeave={handleDropdownLeave}>
-                <button className="nb__dd-btn" aria-haspopup="true" aria-expanded={activeDropdown === "kurikulum"}
-                  onClick={() => setActiveDropdown(prev => prev === "kurikulum" ? null : "kurikulum")}>
+              <div
+                className="nb__dd"
+                onMouseEnter={() => handleDropdownEnter("kurikulum")}
+                onMouseLeave={handleDropdownLeave}
+              >
+                <button
+                  className="nb__dd-btn"
+                  aria-haspopup="true"
+                  aria-expanded={activeDropdown === "kurikulum"}
+                  onClick={() =>
+                    setActiveDropdown((prev) =>
+                      prev === "kurikulum" ? null : "kurikulum",
+                    )
+                  }
+                >
                   Kurikulum <span className="nb__chevron" aria-hidden="true" />
                 </button>
                 {activeDropdown === "kurikulum" && (
                   <div className="nb__panel" role="menu">
-                    <Link href="/kurikulum/profil" className="nb__panel-item" onClick={() => setActiveDropdown(null)}>
+                    <Link
+                      href="/kurikulum/profil"
+                      className="nb__panel-item"
+                      onClick={() => setActiveDropdown(null)}
+                    >
                       <span className="nb__dot" /> Profil Kurikulum
                     </Link>
-                    <Link href="/kurikulum/struktur" className="nb__panel-item" onClick={() => setActiveDropdown(null)}>
+                    <Link
+                      href="/kurikulum/struktur"
+                      className="nb__panel-item"
+                      onClick={() => setActiveDropdown(null)}
+                    >
                       <span className="nb__dot" /> Struktur Kurikulum
                     </Link>
                   </div>
                 )}
               </div>
 
-              <div className="nb__dd" onMouseEnter={() => handleDropdownEnter("jurusan")} onMouseLeave={handleDropdownLeave}>
-                <button className="nb__dd-btn" aria-haspopup="true" aria-expanded={activeDropdown === "jurusan"}
-                  onClick={() => setActiveDropdown(prev => prev === "jurusan" ? null : "jurusan")}>
+              <div
+                className="nb__dd"
+                onMouseEnter={() => handleDropdownEnter("jurusan")}
+                onMouseLeave={handleDropdownLeave}
+              >
+                <button
+                  className="nb__dd-btn"
+                  aria-haspopup="true"
+                  aria-expanded={activeDropdown === "jurusan"}
+                  onClick={() =>
+                    setActiveDropdown((prev) =>
+                      prev === "jurusan" ? null : "jurusan",
+                    )
+                  }
+                >
                   Jurusan <span className="nb__chevron" aria-hidden="true" />
                 </button>
                 {activeDropdown === "jurusan" && (
                   <div className="nb__panel nb__panel--jurusan" role="menu">
                     <div className="nb__jurusan-grid">
-                      {jurusan.map(j => (
-                        <Link key={j} href={`/jurusan/${j.toLowerCase()}`} className="nb__jurusan-chip" onClick={() => setActiveDropdown(null)}>{j}</Link>
+                      {jurusan.map((j) => (
+                        <Link
+                          key={j}
+                          href={`/jurusan/${j.toLowerCase()}`}
+                          className="nb__jurusan-chip"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          {j}
+                        </Link>
                       ))}
                     </div>
                   </div>
                 )}
               </div>
 
-              <Link href="/bahan-ajar" className="nb__link">Bahan Ajar</Link>
-              <Link href="/evaluasi" className="nb__link">Evaluasi</Link>
-              <Link href="/ict" className="nb__link">ICT</Link>
-    
+              <Link href="/bahan-ajar" className="nb__link">
+                Bahan Ajar
+              </Link>
+              <Link href="/evaluasi" className="nb__link">
+                Evaluasi
+              </Link>
+              <Link href="/ict" className="nb__link">
+                ICT
+              </Link>
             </div>
 
             {/* Hamburger */}
-            <button className="nb__ham" onClick={() => setIsOpen(prev => !prev)}
-              aria-label={isOpen ? "Tutup menu" : "Buka menu"} aria-expanded={isOpen} aria-controls="mobile-menu">
-              <div className="nb__ham-line" style={isOpen ? { transform: "rotate(45deg) translate(0, 7px)" } : {}} />
-              <div className="nb__ham-line" style={isOpen ? { opacity: 0, transform: "scaleX(0)" } : {}} />
-              <div className="nb__ham-line" style={isOpen ? { transform: "rotate(-45deg) translate(0, -7px)" } : {}} />
+            <button
+              className="nb__ham"
+              onClick={() => setIsOpen((prev) => !prev)}
+              aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+            >
+              <div
+                className="nb__ham-line"
+                style={
+                  isOpen ? { transform: "rotate(45deg) translate(0, 7px)" } : {}
+                }
+              />
+              <div
+                className="nb__ham-line"
+                style={isOpen ? { opacity: 0, transform: "scaleX(0)" } : {}}
+              />
+              <div
+                className="nb__ham-line"
+                style={
+                  isOpen
+                    ? { transform: "rotate(-45deg) translate(0, -7px)" }
+                    : {}
+                }
+              />
             </button>
           </div>
         </div>
 
-        {isOpen && <div className="nb__overlay" aria-hidden="true" onClick={closeAll} />}
+        {isOpen && (
+          <div className="nb__overlay" aria-hidden="true" onClick={closeAll} />
+        )}
 
         {isOpen && (
           <div className="nb__mobile" id="mobile-menu" role="navigation">
-            <Link href="/home" onClick={closeAll} className="nb__m-link">Home</Link>
+            <Link href="/home" onClick={closeAll} className="nb__m-link">
+              Home
+            </Link>
             <div className="nb__divider" />
 
-            <button onClick={() => toggleSub("kurikulum")} className="nb__m-acc-btn" aria-expanded={openSub === "kurikulum"}>
+            <button
+              onClick={() => toggleSub("kurikulum")}
+              className="nb__m-acc-btn"
+              aria-expanded={openSub === "kurikulum"}
+            >
               Kurikulum <span className="nb__chevron" />
             </button>
             {openSub === "kurikulum" && (
               <div className="nb__m-sub">
-                <Link href="/kurikulum/profil" onClick={closeAll} className="nb__m-sub-link">Profil Kurikulum</Link>
-                <Link href="/kurikulum/struktur" onClick={closeAll} className="nb__m-sub-link">Struktur Kurikulum</Link>
+                <Link
+                  href="/kurikulum/profil"
+                  onClick={closeAll}
+                  className="nb__m-sub-link"
+                >
+                  Profil Kurikulum
+                </Link>
+                <Link
+                  href="/kurikulum/struktur"
+                  onClick={closeAll}
+                  className="nb__m-sub-link"
+                >
+                  Struktur Kurikulum
+                </Link>
               </div>
             )}
 
-            <button onClick={() => toggleSub("jurusan")} className="nb__m-acc-btn" aria-expanded={openSub === "jurusan"}>
+            <button
+              onClick={() => toggleSub("jurusan")}
+              className="nb__m-acc-btn"
+              aria-expanded={openSub === "jurusan"}
+            >
               Jurusan <span className="nb__chevron" />
             </button>
             {openSub === "jurusan" && (
               <div className="nb__m-jurusan-grid">
-                {jurusan.map(j => (
-                  <Link key={j} href={`/jurusan/${j.toLowerCase()}`} onClick={closeAll} className="nb__m-chip">{j}</Link>
+                {jurusan.map((j) => (
+                  <Link
+                    key={j}
+                    href={`/jurusan/${j.toLowerCase()}`}
+                    onClick={closeAll}
+                    className="nb__m-chip"
+                  >
+                    {j}
+                  </Link>
                 ))}
               </div>
             )}
 
             <div className="nb__divider" />
-            <Link href="/bahan-ajar" onClick={closeAll} className="nb__m-link">Bahan Ajar</Link>
-            <Link href="/evaluasi" onClick={closeAll} className="nb__m-link">Evaluasi</Link>
-            <Link href="/ict" onClick={closeAll} className="nb__m-link">ICT</Link>
+            <Link href="/bahan-ajar" onClick={closeAll} className="nb__m-link">
+              Bahan Ajar
+            </Link>
+            <Link href="/evaluasi" onClick={closeAll} className="nb__m-link">
+              Evaluasi
+            </Link>
+            <Link href="/ict" onClick={closeAll} className="nb__m-link">
+              ICT
+            </Link>
           </div>
         )}
       </nav>
