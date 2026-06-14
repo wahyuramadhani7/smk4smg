@@ -261,23 +261,6 @@ export default function Navbar() {
           color: #1d4ed8;
         }
 
-        /* Login Button — kuning sesuai referensi */
-        .nb__login {
-          margin-left: 8px;
-          padding: 0.5rem 1.2rem;
-          border-radius: 6px;
-          background: #f59e0b;
-          border: none;
-          color: #ffffff;
-          font-size: 0.875rem;
-          font-weight: 700;
-          text-decoration: none;
-          transition: background 0.2s, transform 0.15s;
-          white-space: nowrap;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          letter-spacing: 0.01em;
-        }
-        .nb__login:hover { background: #d97706; transform: translateY(-1px); }
 
         /* Hamburger */
         .nb__ham {
@@ -410,20 +393,7 @@ export default function Navbar() {
 
         .nb__divider { height: 1px; background: #f3f4f6; margin: 4px 14px; }
 
-        .nb__m-login {
-          display: block;
-          margin: 10px 14px 0;
-          padding: 13px 16px;
-          border-radius: 8px;
-          background: #f59e0b;
-          color: #ffffff;
-          font-size: 0.9rem;
-          font-weight: 700;
-          text-decoration: none;
-          text-align: center;
-          transition: background 0.2s;
-        }
-        .nb__m-login:hover { background: #d97706; }
+        
 
         @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideDown {
@@ -455,7 +425,7 @@ export default function Navbar() {
         @media (min-width: 768px) and (max-width: 1024px) {
           .nb__inner { padding: 0 1.25rem; }
           .nb__link, .nb__dd-btn { padding: 0.4rem 0.7rem; font-size: 0.82rem; }
-          .nb__login { padding: 0.45rem 0.9rem; font-size: 0.82rem; }
+          
         }
       `}</style>
 
@@ -512,7 +482,7 @@ export default function Navbar() {
               <Link href="/bahan-ajar" className="nb__link">Bahan Ajar</Link>
               <Link href="/evaluasi" className="nb__link">Evaluasi</Link>
               <Link href="/ict" className="nb__link">ICT</Link>
-              <Link href="/login" className="nb__login">Login Admin</Link>
+    
             </div>
 
             {/* Hamburger */}
@@ -557,7 +527,6 @@ export default function Navbar() {
             <Link href="/bahan-ajar" onClick={closeAll} className="nb__m-link">Bahan Ajar</Link>
             <Link href="/evaluasi" onClick={closeAll} className="nb__m-link">Evaluasi</Link>
             <Link href="/ict" onClick={closeAll} className="nb__m-link">ICT</Link>
-            <Link href="/login" onClick={closeAll} className="nb__m-login">Login Admin</Link>
           </div>
         )}
       </nav>
