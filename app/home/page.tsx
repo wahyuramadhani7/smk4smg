@@ -357,8 +357,6 @@ export default function Home() {
                     <p style={{ fontSize: 13, color: "#1d4ed8", fontWeight: 600 }}>{c.sambutan_jabatan}</p>
                   </div>
                 </div>
-
-                <p style={{ marginTop: 20, fontSize: 13, color: "#9ca3af" }}>Wassalamu'alaikum Wr. Wb.</p>
               </div>
             </div>
           </div>
