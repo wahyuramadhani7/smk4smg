@@ -204,33 +204,29 @@ export default function Home() {
             backgroundSize: "cover", backgroundPosition: "center",
           }} />
 
-          {/* Overlay gelap center */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "rgba(10,20,60,.65)",
-          }} />
+          {/* Overlay */}
+          <div style={{ position: "absolute", inset: 0, background: "rgba(10,20,60,.65)" }} />
 
-          {/* Content — tengah */}
+          {/* Content */}
           <div style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: 1280, margin: "0 auto", padding: "0 2rem" }}>
-            <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+            <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
 
-              {/* Badge kuning */}
+              {/* Badge */}
               <div className="hero-badge" style={{ marginBottom: 20 }}>
-                <span style={{
-                  fontSize: 12, fontWeight: 700, letterSpacing: ".18em",
-                  textTransform: "uppercase", color: "#f59e0b",
-                }}>
+                <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#f59e0b" }}>
                   SELAMAT DATANG DI SEKOLAH UNGGULAN
                 </span>
               </div>
 
+              {/* ── PERUBAHAN: whiteSpace nowrap + font lebih kecil agar satu baris ── */}
               <h1 className="hero-h1" style={{
-                fontSize: "clamp(2.2rem, 6vw, 4rem)",
+                fontSize: "clamp(1.4rem, 4.5vw, 3.4rem)",
                 fontWeight: 800,
                 lineHeight: 1.15,
                 color: "#ffffff",
                 margin: "0 0 24px",
-                letterSpacing: "-0.01em",
+                letterSpacing: "0.04em",
+                whiteSpace: "nowrap",
               }}>
                 {c.hero_title}
               </h1>

@@ -44,8 +44,8 @@ const CARDS = [
     accentBorder: 'rgba(37,99,235,.35)',
     accentText: '#60a5fa',
     barGrad: 'linear-gradient(90deg,#2563eb,#38bdf8)',
-    btnBg: 'linear-gradient(135deg,#2563eb,#1d4ed8)',
-    btnGlow: 'rgba(37,99,235,.4)',
+    btnBg: 'linear-gradient(135deg,#1d4ed8,#2563eb)',
+    btnGlow: 'rgba(29,78,216,.2)',
     label: 'Akses LMS Siswa',
     delay: '.25s',
   },
@@ -56,8 +56,8 @@ const CARDS = [
     accentBorder: 'rgba(5,150,105,.35)',
     accentText: '#6ee7b7',
     barGrad: 'linear-gradient(90deg,#059669,#34d399)',
-    btnBg: 'linear-gradient(135deg,#059669,#047857)',
-    btnGlow: 'rgba(5,150,105,.4)',
+    btnBg: 'linear-gradient(135deg,#047857,#059669)',
+    btnGlow: 'rgba(5,150,105,.2)',
     label: 'Akses E-Raport',
     delay: '.4s',
   },
@@ -91,9 +91,9 @@ export default function ICT() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050810' }}>
-        <div style={{ width: 40, height: 40, border: '3px solid rgba(96,165,250,.15)', borderTopColor: '#60a5fa', borderRadius: '50%', animation: 'spin .8s linear infinite' }} />
-        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb' }}>
+        <div style={{ width: 40, height: 40, border: '3px solid #e5e7eb', borderTopColor: '#1d4ed8', borderRadius: '50%', animation: 'spin .8s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -106,97 +106,113 @@ export default function ICT() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
-        @keyframes spin     { to{transform:rotate(360deg)} }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        @keyframes spin     { to { transform: rotate(360deg); } }
         @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fadeUp   { from{opacity:0;transform:translateY(28px)}  to{opacity:1;transform:translateY(0)} }
-        @keyframes scaleIn  { from{opacity:0;transform:scale(.93)}        to{opacity:1;transform:scale(1)} }
+        @keyframes scaleIn  { from{opacity:0;transform:scale(.94)}        to{opacity:1;transform:scale(1)} }
 
         .ict-title  { animation: fadeDown .8s .1s ease both; }
         .ict-sub    { animation: fadeUp  .8s .25s ease both; }
         .ict-footer { animation: fadeUp  .8s .6s ease both; }
+
+        .ict-card {
+          transition: transform .25s ease, box-shadow .25s ease;
+          cursor: default;
+        }
+        .ict-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 16px 48px rgba(0,0,0,.1);
+        }
 
         .ict-btn {
           position: relative; overflow: hidden;
           transition: transform .2s ease, box-shadow .3s ease;
           display: block; text-align: center; text-decoration: none;
         }
-        .ict-btn:hover { transform: translateY(-3px); }
+        .ict-btn:hover {
+          transform: translateY(-2px);
+        }
         .ict-btn::after {
-          content:''; position:absolute; inset:0;
-          background:rgba(255,255,255,.15);
-          transform:scaleX(0); transform-origin:left;
-          transition:transform .35s ease;
+          content: ''; position: absolute; inset: 0;
+          background: rgba(255,255,255,.15);
+          transform: scaleX(0); transform-origin: left;
+          transition: transform .35s ease;
         }
-        .ict-btn:hover::after { transform:scaleX(1); }
-
-        .ict-card {
-          transition: transform .3s ease, box-shadow .3s ease;
-          cursor: default;
-        }
-        .ict-card:hover { transform: translateY(-8px); }
+        .ict-btn:hover::after { transform: scaleX(1); }
       `}</style>
 
-      <main style={{ minHeight: '100vh', background: '#050810', fontFamily: 'Outfit, sans-serif', paddingBottom: 80 }}>
+      <main style={{ minHeight: '100vh', background: '#ffffff', fontFamily: "'Plus Jakarta Sans', sans-serif", paddingBottom: 80 }}>
 
-        {/* Hero */}
-        <section style={{ position: 'relative', padding: '80px 24px 72px', textAlign: 'center', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(37,99,235,.18) 0%, transparent 65%)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(37,99,235,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.05) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,#38bdf8,transparent)' }} />
+        {/* ── Hero ── */}
+        <section style={{ position: 'relative', padding: '80px 24px 72px', textAlign: 'center', overflow: 'hidden', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #1d4ed8, #f59e0b)' }} />
 
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div className="ict-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block' }} />
-              <span style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 600, color: '#60a5fa' }}>Teknologi Informasi</span>
-              <span style={{ width: 24, height: 1, background: '#60a5fa', display: 'inline-block' }} />
+              <span style={{ width: 24, height: 1, background: '#f59e0b', display: 'inline-block' }} />
+              <span style={{ fontSize: 11, letterSpacing: '.35em', textTransform: 'uppercase', fontWeight: 700, color: '#f59e0b' }}>Teknologi Informasi</span>
+              <span style={{ width: 24, height: 1, background: '#f59e0b', display: 'inline-block' }} />
             </div>
-            <h1 className="ict-title" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(2.8rem,7vw,5.5rem)', letterSpacing: '.04em', lineHeight: 1, color: '#fff', margin: '0 0 20px' }}>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', width: 80, height: 80, borderRadius: 24, background: '#eff6ff', border: '1.5px solid #bfdbfe', fontSize: '2.4rem' }}>
+              💻
+            </div>
+
+            <h1 className="ict-title" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 'clamp(1.8rem,5vw,3.2rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.01em', color: '#111827', margin: '0 0 16px' }}>
               {content.main_title}
             </h1>
-            <p className="ict-sub" style={{ fontSize: 'clamp(.95rem,1.8vw,1.1rem)', color: 'rgba(255,255,255,.6)', lineHeight: 1.8, maxWidth: 520, margin: '0 auto 24px', whiteSpace: 'pre-line' }}>
+
+            <p className="ict-sub" style={{ fontSize: 'clamp(1rem,1.8vw,1.1rem)', color: '#6b7280', lineHeight: 1.85, maxWidth: 520, margin: '0 auto 20px', fontWeight: 500, whiteSpace: 'pre-line' }}>
               {content.main_subtitle}
             </p>
-            <div style={{ width: 80, height: 4, borderRadius: 9999, background: 'linear-gradient(90deg,#2563eb,#38bdf8)', margin: '0 auto' }} />
+
+            <div style={{ width: 60, height: 4, borderRadius: 9999, background: 'linear-gradient(90deg, #1d4ed8, #f59e0b)', margin: '0 auto' }} />
           </div>
         </section>
 
-        {/* Cards */}
+        {/* ── Cards ── */}
         <div style={{ maxWidth: 900, margin: '0 auto', padding: '56px 24px 0' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, marginBottom: 32 }}>
+
             {cardData.map((card) => (
               <div
                 key={card.key}
                 className="ict-card"
                 style={{
-                  borderRadius: 20, overflow: 'hidden',
-                  border: `1px solid ${card.accentBorder}`,
+                  borderRadius: 16, overflow: 'hidden',
+                  border: '1px solid #e5e7eb',
+                  background: '#ffffff',
+                  boxShadow: '0 4px 20px rgba(0,0,0,.05)',
                   display: 'flex', flexDirection: 'column',
                   animation: `scaleIn .7s ${card.delay} ease both`,
                 }}
               >
                 <div style={{ height: 4, background: card.barGrad, flexShrink: 0 }} />
-                <div style={{ padding: 32, background: 'rgba(255,255,255,.03)', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: 32, flex: 1, display: 'flex', flexDirection: 'column' }}>
+
                   {/* Icon */}
                   <div style={{
-                    width: 60, height: 60, borderRadius: 18, flexShrink: 0,
-                    background: card.accentSoft,
+                    width: 56, height: 56, borderRadius: 14, flexShrink: 0,
+                    background: '#eff6ff', border: '1px solid #bfdbfe',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '1.9rem', marginBottom: 20,
+                    fontSize: '1.7rem', marginBottom: 20,
                   }}>
                     {card.icon}
                   </div>
 
                   {/* Label */}
-                  <p style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 600, color: card.accentText, marginBottom: 8 }}>
+                  <p style={{ fontSize: 11, letterSpacing: '.3em', textTransform: 'uppercase', fontWeight: 700, color: '#f59e0b', marginBottom: 8 }}>
                     {card.key === 'lms' ? 'Learning Management System' : 'Rapor Elektronik'}
                   </p>
 
-                  <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.6rem', letterSpacing: '.05em', color: '#fff', margin: '0 0 14px' }}>
+                  <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: '1.3rem', fontWeight: 800, color: '#111827', margin: '0 0 14px' }}>
                     {card.title}
                   </h2>
 
-                  <p style={{ fontSize: 14, color: 'rgba(255,255,255,.65)', lineHeight: 1.8, flex: 1, marginBottom: 28 }}>
+                  <p style={{ fontSize: 14, color: '#4b5563', lineHeight: 1.85, flex: 1, marginBottom: 28 }}>
                     {card.desc}
                   </p>
 
@@ -207,10 +223,10 @@ export default function ICT() {
                     className="ict-btn"
                     style={{
                       background: card.btnBg,
-                      color: '#fff', fontWeight: 600,
-                      borderRadius: 12, padding: '14px 24px',
-                      fontSize: 14, letterSpacing: '.04em',
-                      boxShadow: `0 0 24px ${card.btnGlow}`,
+                      color: '#fff', fontWeight: 700,
+                      borderRadius: 9999, padding: '13px 24px',
+                      fontSize: 14, letterSpacing: '.02em',
+                      boxShadow: `0 4px 16px ${card.btnGlow}`,
                     }}
                   >
                     {card.label} →
@@ -218,22 +234,24 @@ export default function ICT() {
                 </div>
               </div>
             ))}
+
           </div>
 
           {/* Footer note */}
           <div className="ict-footer" style={{
-            textAlign: 'center', padding: '24px 32px', borderRadius: 16,
-            background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.07)',
+            textAlign: 'center', padding: '24px 32px', borderRadius: 12,
+            background: '#f9fafb', border: '1px solid #e5e7eb',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
           }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', whiteSpace: 'pre-line', margin: 0 }}>
+            <p style={{ fontSize: 13, color: '#6b7280', whiteSpace: 'pre-line', margin: 0, fontWeight: 500 }}>
               {content.footer_note}
             </p>
           </div>
         </div>
+
       </main>
     </>
   );
