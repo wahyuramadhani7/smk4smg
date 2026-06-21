@@ -31,6 +31,14 @@ const JURUSAN_LIST = [
   { kode: 'TSM', nama: 'Teknik Sepeda Motor' },
 ];
 
+// Pengelompokan untuk tampilan sidebar saja (tidak memengaruhi data/struktur tabel).
+// TKR & TSM dikelompokkan di bawah "Teknik Otomotif" karena ditampilkan bersama
+// pada halaman publik /jurusan/teknik-otomotif (lihat jurusan-to.tsx).
+const BIDANG_GROUPS: { bidang: string; kodes: string[] }[] = [
+  { bidang: 'Teknik Otomotif', kodes: ['TKR', 'TSM'] },
+  { bidang: 'Lainnya', kodes: ['DPIB', 'DKV', 'Animasi', 'TEI', 'TITL', 'TPM'] },
+];
+
 const DEFAULT_JURUSAN: Omit<Jurusan, 'id' | 'kode' | 'nama_lengkap' | 'nama_singkat'> = {
   subtitle: 'Program Keahlian',
   profil_description: 'Deskripsi jurusan akan diisi di sini...',
@@ -137,22 +145,36 @@ export default function AdminJurusan() {
           <div className="col-span-12 lg:col-span-3">
             <div className="bg-white p-5 rounded-2xl shadow sticky top-6">
               <h3 className="font-semibold mb-4">Pilih Jurusan</h3>
-              {JURUSAN_LIST.map(j => {
-                const jurusanData = jurusanList.find(item => item.kode === j.kode);
+
+              {BIDANG_GROUPS.map((group) => {
+                // Ambil item JURUSAN_LIST sesuai urutan & kode pada grup ini
+                const itemsInGroup = JURUSAN_LIST.filter(j => group.kodes.includes(j.kode));
+                if (itemsInGroup.length === 0) return null;
+
                 return (
-                  <button
-                    key={j.kode}
-                    onClick={() => {
-                      if (jurusanData) setSelected(jurusanData);
-                    }}
-                    className={`w-full text-left px-4 py-3 rounded-xl mb-1 transition-all ${
-                      selected.kode === j.kode
-                        ? 'bg-blue-600 text-white'
-                        : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    {j.kode} - {j.nama}
-                  </button>
+                  <div key={group.bidang} className="mb-5">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400 px-1 mb-2">
+                      {group.bidang}
+                    </p>
+                    {itemsInGroup.map(j => {
+                      const jurusanData = jurusanList.find(item => item.kode === j.kode);
+                      return (
+                        <button
+                          key={j.kode}
+                          onClick={() => {
+                            if (jurusanData) setSelected(jurusanData);
+                          }}
+                          className={`w-full text-left px-4 py-3 rounded-xl mb-1 transition-all ${
+                            selected.kode === j.kode
+                              ? 'bg-blue-600 text-white'
+                              : 'hover:bg-gray-100'
+                          }`}
+                        >
+                          {j.kode} - {j.nama}
+                        </button>
+                      );
+                    })}
+                  </div>
                 );
               })}
             </div>
