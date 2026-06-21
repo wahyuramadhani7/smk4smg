@@ -3,7 +3,17 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-const jurusan = ["DPIB", "TPM", "TKR", "TITL", "TEI", "DKV", "ANS", "TSM"];
+// TKR & TSM digabung menjadi satu entri "TO" (Teknik Otomotif) yang mengarah
+// ke halaman gabungan /jurusan/teknik-otomotif (lihat jurusan-to.tsx).
+const jurusan = [
+  { label: "DPIB", href: "/jurusan/dpib" },
+  { label: "TPM", href: "/jurusan/tpm" },
+  { label: "TO", href: "/jurusan/teknik-otomotif" },
+  { label: "TITL", href: "/jurusan/titl" },
+  { label: "TEI", href: "/jurusan/tei" },
+  { label: "DKV", href: "/jurusan/dkv" },
+  { label: "ANS", href: "/jurusan/ans" },
+];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -526,12 +536,12 @@ export default function Navbar() {
                     <div className="nb__jurusan-grid">
                       {jurusan.map((j) => (
                         <Link
-                          key={j}
-                          href={`/jurusan/${j.toLowerCase()}`}
+                          key={j.label}
+                          href={j.href}
                           className="nb__jurusan-chip"
                           onClick={() => setActiveDropdown(null)}
                         >
-                          {j}
+                          {j.label}
                         </Link>
                       ))}
                     </div>
@@ -628,12 +638,12 @@ export default function Navbar() {
               <div className="nb__m-jurusan-grid">
                 {jurusan.map((j) => (
                   <Link
-                    key={j}
-                    href={`/jurusan/${j.toLowerCase()}`}
+                    key={j.label}
+                    href={j.href}
                     onClick={closeAll}
                     className="nb__m-chip"
                   >
-                    {j}
+                    {j.label}
                   </Link>
                 ))}
               </div>
