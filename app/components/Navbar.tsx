@@ -462,8 +462,8 @@ export default function Navbar() {
                 className="nb__school-logo"
               />
               <div className="nb__logo-text">
-                <span className="nb__logo-main">SMK NEGERI 4 SEMARANG</span>
-                <span className="nb__logo-sub">Semarang · Jawa Tengah</span>
+                <span className="nb__logo-main">SI_PAPAT</span>
+                <span className="nb__logo-sub">Sistem Informasi SMK Empat</span>
               </div>
             </Link>
 
